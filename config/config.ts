@@ -317,14 +317,15 @@ export default defineConfig({
     {
       name: "医生列表",
       icon: 'table',
-      path: '/doctor',
+      path: '/doctor_old',
       component: './doctor/Manage',
+      hideInMenu: true,
     },
 
     {
-      name: "测试",
+      name: "医生列表",
       icon: "table",
-      path: '/test',
+      path: '/doctor',
       component: "./doctor/ManageNew"
     },
 
@@ -342,8 +343,21 @@ export default defineConfig({
         {
           component: '404',
         },
-
       ]
+    },
+
+    {
+      path: "/doctor/details/:id",
+      name: "医生详情",
+      hideInMenu: true,
+      component: "./doctor/Details",
+    },
+
+    {
+      path: "/doctor/edit/:id",
+      name: "医生编辑",
+      hideInMenu: true,
+      component: "./doctor/Edit",
     }
   ],
   // Theme for antd: https://ant.design/docs/react/customize-theme-cn

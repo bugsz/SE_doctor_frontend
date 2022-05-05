@@ -1,10 +1,55 @@
 import React, { useRef } from 'react';
 import { PlusOutlined, EllipsisOutlined } from '@ant-design/icons';
-import { Button, Tag, Space, Menu, Dropdown } from 'antd';
+import { Button, Tag, Space, Menu, Dropdown, notification } from 'antd';
 import type { ProColumns, ActionType } from '@ant-design/pro-table';
 import ProTable, { TableDropdown } from '@ant-design/pro-table';
 import request from 'umi-request';
 import { doctorItem } from './data.js';
+import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
+import { history } from 'umi';
+import { DeleteDoctor } from './service';
+
+function getInfoUrl(record: doctorItem) {
+  return `/doctor/details/${record.doctor_id}`;
+}
+
+function getDeleteUrl(record: doctorItem) {
+  return `${record.doctor_id}/delete`;
+}
+
+function getEditUrl(record: doctorItem) {
+  return `/doctor/edit/${record.doctor_id}`;
+}
+
+const deleteDoctor = async (id) => {
+  try {
+    const msg = await DeleteDoctor({ id });
+    if (msg.status === 'success') {
+      notification.success({
+        duration: 4,
+        description: '删除成功',
+        message: '删除成功',
+      });
+      history.push("/doctors");
+      // window.history.back();
+      // window.location.reload();
+
+    } else {
+      notification.error({
+        duration: 4,
+        message: '删除失败',
+        description: msg.msg || '删除错误，未知错误类型',
+      });
+    }
+    // await refreshCurrent();
+  } catch (error) {
+    notification.error({
+      duration: 4,
+      message: '删除失败',
+      description: '请求失败，请稍后重新尝试',
+    });
+  }
+}
 
 const columns: ProColumns<doctorItem>[] = [
   {
@@ -14,7 +59,7 @@ const columns: ProColumns<doctorItem>[] = [
   },
   {
     title: '姓名',
-    dataIndex: 'name',
+    dataIndex: 'doctor_name',
     copyable: true,
     ellipsis: true,
     // tip: '标题过长会自动收缩',
@@ -30,8 +75,8 @@ const columns: ProColumns<doctorItem>[] = [
 
   {
     title: '工号',
-    key: 'id',
-    dataIndex: 'id',
+    key: 'doctor_id',
+    dataIndex: 'doctor_id',
     // valueType: 'string',
     // sorter: true,
     hideInSearch: true,
@@ -57,10 +102,15 @@ const columns: ProColumns<doctorItem>[] = [
     valueType: 'option',
     key: 'option',
     render: (text, record, _, action) => [
-      <a href={record.url} target="_blank" rel="noopener noreferrer" key="view">
-        查看
-      </a>,
-      <a href={record.url} target="_blank" rel="noopener noreferrer" key="view">
+      <Link className="to" to={{pathname: getInfoUrl(record)}} key="view">查看</Link>,
+      <Link className="to" to={{pathname: getEditUrl(record)}} key="view">编辑</Link>,
+      
+      <a href={getDeleteUrl(record)} target="_blank" rel="noopener noreferrer" key="view" onClick={
+        (e) => {
+          e.preventDefault();
+          deleteDoctor(record.doctor_id);
+        }
+      }>
       删除
       </a>,
     ],
@@ -103,7 +153,7 @@ const ManageNew = () => {
           console.log('value: ', value);
         },
       }}
-      rowKey="id"
+      rowKey="doctor_id"
       search={{
         labelWidth: 'auto',
       }}
@@ -124,7 +174,7 @@ const ManageNew = () => {
         onChange: (page) => console.log(page),
       }}
       dateFormatter="string"
-      headerTitle="高级表格"
+      headerTitle="医生列表"
       toolBarRender={() => [
         <Button key="button" icon={<PlusOutlined />} type="primary">
           新建

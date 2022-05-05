@@ -6,15 +6,14 @@ export async function ListDoctor(params) {
     params: { ...params },
   })
 }
-
-
-
-export async function ListUser(params) {
-  return request('/api/users/list', {
-    method: 'GET',
-    params: { ...params },
-  });
+export async function DeleteDoctor(params) {
+  return request("/api/doctor/delete", {
+    method: "DELETE",
+    params: {...params},
+  }
+  );
 }
+
 // export async function DeleteUser(params) {
 //   return request('/api/users/user', {
 //     method: 'DELETE',

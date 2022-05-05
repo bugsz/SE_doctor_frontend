@@ -1,15 +1,15 @@
 const getDoctor = async (req, res) => {
   const doctorData: doctorItem[] = [
     {
-      id: "1",
-      name: "cxz",
+      doctor_id: "1",
+      doctor_name: "cxz",
       department: "zju",
       role: "doctor",
       moreUrl: "123.xyz",
     },
     {
-      id: "2",
-      name: "sz",
+      doctor_id: "2",
+      doctor_name: "sz",
       department: "sjtu",
       role: "nurse",
       moreUrl: "123.xyz",

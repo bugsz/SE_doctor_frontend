@@ -29,8 +29,8 @@
 // };
 
 export type doctorItem = {
-  id: string;
-  name: string;
+  doctor_id: string;
+  doctor_name: string;
   department: string;
   title: string;
   moreUrl: string;
