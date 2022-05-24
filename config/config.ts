@@ -315,6 +315,13 @@ export default defineConfig({
     
 
     {
+      name: "医生叫号",
+      icon: 'table',
+      path: '/patient_register',
+      component: './patient_register/ManageNew',
+    },
+
+    {
       name: "医生列表",
       icon: 'table',
       path: '/doctor_old',
