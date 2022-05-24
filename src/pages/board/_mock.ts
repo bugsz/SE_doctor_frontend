@@ -99,7 +99,7 @@ const getNotice = (_: Request, res: Response) => {
         title: titles[0],
         logo: avatars[0],
         description: '那是一种内在的东西，他们到达不了，也无法触及的',
-        updatedAt: new Date(),
+        date: new Date(),
         member: '科学搬砖组',
         href: '',
         memberLink: '',
@@ -109,7 +109,7 @@ const getNotice = (_: Request, res: Response) => {
         title: titles[1],
         logo: avatars[1],
         description: '希望是一个好东西，也许是最好的，好东西是不会消亡的',
-        updatedAt: new Date('2017-07-24'),
+        date: new Date('2017-07-24'),
         member: '全组都是吴彦祖',
         href: '',
         memberLink: '',
@@ -119,7 +119,7 @@ const getNotice = (_: Request, res: Response) => {
         title: titles[2],
         logo: avatars[2],
         description: '城镇中有那么多的酒馆，她却偏偏走进了我的酒馆',
-        updatedAt: new Date(),
+        date: new Date(),
         member: '中二少女团',
         href: '',
         memberLink: '',
@@ -129,7 +129,7 @@ const getNotice = (_: Request, res: Response) => {
         title: titles[3],
         logo: avatars[3],
         description: '那时候我只会想自己想要什么，从不想自己拥有什么',
-        updatedAt: new Date('2017-07-23'),
+        date: new Date('2017-07-23'),
         member: '程序员日常',
         href: '',
         memberLink: '',
@@ -139,7 +139,7 @@ const getNotice = (_: Request, res: Response) => {
         title: titles[4],
         logo: avatars[4],
         description: '凛冬将至',
-        updatedAt: new Date('2017-07-23'),
+        date: new Date('2017-07-23'),
         member: '高逼格设计天团',
         href: '',
         memberLink: '',
@@ -149,7 +149,7 @@ const getNotice = (_: Request, res: Response) => {
         title: titles[5],
         logo: avatars[5],
         description: '生命就像一盒巧克力，结果往往出人意料',
-        updatedAt: new Date('2017-07-23'),
+        date: new Date('2017-07-23'),
         member: '骗你来学计算机',
         href: '',
         memberLink: '',
@@ -163,10 +163,12 @@ const getAnnounce = (_: Request, res: Response) => {
     status: 200,
     msg: 'success',
     data: {
+      return_count: 6,
       announce: [
         {
           id: 'trend-1',
-          updatedAt: new Date(),
+          date: new Date(),
+          title: '这是一个标题',
           poster: {
             name: '曲丽丽',
             avatar: avatars2[0],
@@ -180,7 +182,7 @@ const getAnnounce = (_: Request, res: Response) => {
         },
         {
           id: 'trend-2',
-          updatedAt: new Date(),
+          date: new Date(),
           poster: {
             name: '付小小',
             avatar: avatars2[1],
@@ -194,7 +196,7 @@ const getAnnounce = (_: Request, res: Response) => {
         },
         {
           id: 'trend-3',
-          updatedAt: new Date(),
+          date: new Date(),
           poster: {
             name: '林东东',
             avatar: avatars2[2],
@@ -208,7 +210,7 @@ const getAnnounce = (_: Request, res: Response) => {
         },
         {
           id: 'trend-4',
-          updatedAt: new Date(),
+          date: new Date(),
           poster: {
             name: '周星星',
             avatar: avatars2[4],
@@ -236,7 +238,7 @@ const getAnnounce = (_: Request, res: Response) => {
         },
         {
           id: 'trend-6',
-          updatedAt: new Date(),
+          date: new Date(),
           poster: {
             name: '乐哥',
             avatar: avatars2[5],

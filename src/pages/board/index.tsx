@@ -86,7 +86,7 @@ const Board: FC = () => {
           avatar={<Avatar src={item.poster.avatar} />}
           title={
             <span>
-              <a className={styles.username}>{item.poster.name}</a>
+              <a className={styles.title}>{item.title}</a>
               &nbsp;
               <br></br>
               <span className={styles.event}>{events}</span>
@@ -95,6 +95,9 @@ const Board: FC = () => {
           description={
             <span className={styles.datetime} title={item.date}>
               {moment(item.date).format('yyyy年MM月DD日 HH:mm')}
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 由
+              <span className={styles.username}>{item.poster.name}</span>
+              发布
             </span>
           }
         />

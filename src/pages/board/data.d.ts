@@ -91,7 +91,7 @@ export type AnnounceType = {
 
   poster: {
     name: string;
-    avatar: string;
+    avatar?: string;
   };
 
   content: string;
