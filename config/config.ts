@@ -336,10 +336,10 @@ export default defineConfig({
     },
 
     {
-      name: '诊断页',
+      name: '医生诊断',
       path: './docter/diagnosis/:id',
       component: './diagnosis',
-      hideInMenu: true,
+      // hideInMenu: true,
     },
 
     {

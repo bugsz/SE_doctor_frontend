@@ -30,6 +30,7 @@ const getPatientInfo = (_: Request, res: Response) => {
       appoint_date: new Date('2022-05-22'),
       section: SectionType.Afternoon,
       department: '肛肠科',
+      history: ['这是病史1', '这是病史2'],
     },
   });
 };

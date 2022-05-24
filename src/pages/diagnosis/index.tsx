@@ -1,116 +1,91 @@
+import ProForm, { ProFormTextArea } from '@ant-design/pro-form';
 import { PageContainer } from '@ant-design/pro-layout';
-import { Avatar, Skeleton, Statistic } from 'antd';
-import moment from 'moment';
+import { Card, Descriptions, Divider } from 'antd';
 import type { FC } from 'react';
-import type { CurrentUser } from './data';
+import { useParams, useRequest } from 'umi';
+import type { patientInfoType } from './data';
+import { deletePatient, queryPatientInfo, uploadDiagnosis } from './service';
 import styles from './style.less';
 
-const PageHeaderContent: FC<{ currentUser: Partial<CurrentUser> }> = ({ currentUser }) => {
-  const loading = currentUser && Object.keys(currentUser).length;
-  if (!loading) {
-    return <Skeleton avatar paragraph={{ rows: 1 }} active />;
-  }
-  return (
-    <div className={styles.pageHeaderContent}>
-      <div className={styles.avatar}>
-        <Avatar size="large" src={currentUser.avatar} />
-      </div>
-      <div className={styles.content}>
-        <div className={styles.contentTitle}>
-          早安，
-          {currentUser.name}医生 ，祝你开心每一天！
-        </div>
-        {/* <div>
-          {currentUser.title} |{currentUser.group}
-        </div> */}
-      </div>
-    </div>
-  );
-};
-
-const ExtraContent: FC<Record<string, any>> = () => {
-  moment.locale('zh-cn');
-
-  return (
-    <div className={styles.extraContent}>
-      <div className={styles.statItem}>
-        <Statistic title={moment().format('yyyy年MM月D日')} value={moment().format('dddd')} />
-      </div>
-      <div className={styles.statItem}>
-        <Statistic title="科室" value={'口腔科'} />
-      </div>
-    </div>
-  );
-};
+interface IParam {
+  id?: string;
+}
 
 const Diagnosis: FC = () => {
-  // const { loading: announceLoading, data: data } = useRequest(queryPatientInfo);
+  // const { loading: patientInfoLoading, data: patientInfo } = useRequest({
+  //   url: '/api/doctor/patient_info/get',
+  //   method: 'GET',
+  //   params: useParams<IParam>(),
+  // });
 
-  // const announce = data?.announce;
+  const { loading: patientInfoLoading, data: _patientInfo } = useRequest(queryPatientInfo, {
+    defaultParams: useParams<IParam>(),
+  });
 
-  // const renderAnnounce = (item: patientInfoType) => {
-  //   const events = item.content;
-  //   return (
-  //     <List.Item key={item.id}>
-  //       <List.Item.Meta
-  //         avatar={<Avatar src={item.poster.avatar} />}
-  //         title={
-  //           <span>
-  //             <a className={styles.title}>{item.title}</a>
-  //             &nbsp;
-  //             <br></br>
-  //             <span className={styles.event}>{events}</span>
-  //           </span>
-  //         }
-  //         description={
-  //           <span className={styles.datetime} title={item.date}>
-  //             {moment(item.date).format('yyyy年MM月DD日 HH:mm')}
-  //             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 由
-  //             <span className={styles.username}>{item.poster.name}</span>
-  //             发布
-  //           </span>
-  //         }
-  //       />
-  //     </List.Item>
-  //   );
-  // };
+  const patientInfo = _patientInfo!;
+
+  // console.log(useParams<IParam>());
+  console.log(patientInfoLoading);
+  console.log(patientInfo);
+
+  const renderPatientInfo = (item: patientInfoType) => (
+    <Card loading={patientInfoLoading}>
+      {!patientInfoLoading ? (
+        <Descriptions title="患者信息">
+          <Descriptions.Item label="姓名">{item.name}</Descriptions.Item>
+          <Descriptions.Item label="性别">{item.gender}</Descriptions.Item>
+          <Descriptions.Item label="年龄">{item.age}</Descriptions.Item>
+          <Descriptions.Item label="电话">{item.phone}</Descriptions.Item>
+        </Descriptions>
+      ) : null}
+      {!patientInfoLoading ? (
+        <Card type="inner" title="患者病史">
+          {item.history?.map((str, index) => {
+            const title_str = `病史${index + 1}`;
+            // TODO: 病史可以用更复杂的对象数组来表示，现在是单纯字符串数组
+            return (
+              <div>
+                <Descriptions style={{ marginBottom: 16 }} title={title_str} key={index}>
+                  <Descriptions.Item label="描述">{str}</Descriptions.Item>
+                </Descriptions>
+                <Divider style={{ margin: '16px 0' }} />
+              </div>
+            );
+          })}
+        </Card>
+      ) : null}
+    </Card>
+  );
 
   return (
-    <PageContainer
-      content={
-        <PageHeaderContent
-          currentUser={{
-            avatar: 'https://gw.alipayobjects.com/zos/rmsportal/BiazfanxmamNRoxxVxka.png',
-            name: 'sz',
-            userid: '00000001',
-            email: 'antdesign@alipay.com',
-            // signature: '海纳百川，有容乃大',
-            // title: '交互专家',
-            // group: '蚂蚁金服－某某某事业群－某某平台部－某某技术部－UED',
+    <PageContainer>
+      {renderPatientInfo(patientInfo)}
+      <Card title="诊断意见" className={styles.activeCard}>
+        <ProForm
+          onFinish={async (values) => {
+            deletePatient({ id: patientInfo.id });
+            uploadDiagnosis({
+              patient_id: patientInfo.id,
+              patient_name: patientInfo.name,
+              date: new Date().toDateString(),
+              content: values.diagnosis,
+            });
           }}
-        />
-      }
-      extraContent={<ExtraContent />}
-    >
-      {/* <Row gutter={24}>
-        <Col xl={16} lg={24} md={24} sm={24} xs={24}>
-          <Card
-            bodyStyle={{ padding: 0 }}
-            bordered={false}
-            className={styles.activeCard}
-            title="医院信息"
-            loading={announceLoading}
-          >
-            <List<patientInfoType>
-              loading={announceLoading}
-              renderItem={(item) => renderAnnounce(item)}
-              dataSource={announce}
-              className={styles.activitiesList}
-              size="large"
-            />
-          </Card>
-        </Col>
-      </Row> */}
+        >
+          <ProFormTextArea
+            label="目标描述"
+            width="xl"
+            name="diagnosis"
+            rules={[
+              {
+                required: true,
+                message: '请输入诊断意见',
+              },
+            ]}
+            placeholder="请输入诊断意见"
+          />
+        </ProForm>
+      </Card>
     </PageContainer>
   );
 };
