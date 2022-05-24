@@ -329,6 +329,13 @@ export default defineConfig({
     },
 
     {
+      name: '诊断页',
+      path: './docter/diagnosis/:id',
+      component: './diagnosis',
+      hideInMenu: true,
+    },
+
+    {
       name: '公告板',
       icon: 'dashboard',
       path: '/board',
