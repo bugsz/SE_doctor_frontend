@@ -1,6 +1,6 @@
 // https://umijs.org/config/
-import { defineConfig } from 'umi';
 import { join } from 'path';
+import { defineConfig } from 'umi';
 import defaultSettings from './defaultSettings';
 import proxy from './proxy';
 
@@ -310,19 +310,18 @@ export default defineConfig({
     },
     {
       path: '/',
-      redirect: '/dashboard/analysis',
+      redirect: '/board',
     },
-    
 
     {
-      name: "医生叫号",
+      name: '医生叫号',
       icon: 'table',
       path: '/patient_register',
       component: './patient_register/ManageNew',
     },
 
     {
-      name: "医生列表",
+      name: '医生列表',
       icon: 'table',
       path: '/doctor_old',
       component: './doctor/Manage',
@@ -330,42 +329,56 @@ export default defineConfig({
     },
 
     {
-      name: "医生列表",
-      icon: "table",
+      name: '医生列表',
+      icon: 'table',
       path: '/doctor',
-      component: "./doctor/ManageNew"
+      component: './doctor/ManageNew',
     },
 
     {
-      name: "个人页",
+      name: '诊断页',
+      path: './docter/diagnosis/:id',
+      component: './diagnosis',
+      hideInMenu: true,
+    },
+
+    {
+      name: '公告板',
+      icon: 'dashboard',
+      path: '/board',
+      component: './board',
+    },
+
+    {
+      name: '个人页',
       icon: 'table',
       path: '/me',
       routes: [
         {
-          name: "个人设置",
-          icon: "table",
+          name: '个人设置',
+          icon: 'table',
           path: '/me/setting',
-          component: "./me/Setting",
+          component: './me/Setting',
         },
         {
           component: '404',
         },
-      ]
+      ],
     },
 
     {
-      path: "/doctor/details/:id",
-      name: "医生详情",
+      path: '/doctor/details/:id',
+      name: '医生详情',
       hideInMenu: true,
-      component: "./doctor/Details",
+      component: './doctor/Details',
     },
 
     {
-      path: "/doctor/edit/:id",
-      name: "医生编辑",
+      path: '/doctor/edit/:id',
+      name: '医生编辑',
       hideInMenu: true,
-      component: "./doctor/Edit",
-    }
+      component: './doctor/Edit',
+    },
   ],
   // Theme for antd: https://ant.design/docs/react/customize-theme-cn
   theme: {
