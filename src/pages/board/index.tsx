@@ -58,20 +58,16 @@ const PageHeaderContent: FC<{ currentUser: Partial<CurrentUser> }> = ({ currentU
   );
 };
 
-const ExtraContent: FC<Record<string, any>> = () => {
-  moment.locale('zh-cn');
-
-  return (
-    <div className={styles.extraContent}>
-      <div className={styles.statItem}>
-        <Statistic title={moment().format('yyyy年MM月D日')} value={moment().format('dddd')} />
-      </div>
-      <div className={styles.statItem}>
-        <Statistic title="科室" value={'口腔科'} />
-      </div>
+const ExtraContent: FC<Record<string, any>> = () => (
+  <div className={styles.extraContent}>
+    <div className={styles.statItem}>
+      <Statistic title={moment().format('yyyy年MM月D日')} value={moment().format('dddd')} />
     </div>
-  );
-};
+    <div className={styles.statItem}>
+      <Statistic title="科室" value={'口腔科'} />
+    </div>
+  </div>
+);
 
 const Board: FC = () => {
   const { loading: announceLoading, data: data } = useRequest(queryAnnounce);

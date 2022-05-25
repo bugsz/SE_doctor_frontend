@@ -337,9 +337,9 @@ export default defineConfig({
 
     {
       name: '医生诊断',
-      path: './docter/diagnosis/:id',
+      path: '/docter/diagnosis/:id',
       component: './diagnosis',
-      // hideInMenu: true,
+      hideInMenu: true,
     },
 
     {
