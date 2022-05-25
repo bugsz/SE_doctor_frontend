@@ -39,7 +39,7 @@ const Login: React.FC = () => {
   const fetchUserInfo = async () => {
     const userInfo = await initialState?.fetchUserInfo?.();
     if (userInfo) {
-      await setInitialState((s) => ({
+      await setInitialState((s: any) => ({
         ...s,
         currentUser: userInfo,
       }));
@@ -84,21 +84,21 @@ const Login: React.FC = () => {
       </div>
       <div className={styles.content}>
         <LoginForm
-          logo={<img alt="logo" src="/logo.svg" />}
-          title="Ant Design"
-          subTitle={intl.formatMessage({ id: 'pages.layouts.userLayout.title' })}
+          logo={<img alt="logo" src="/logo/logo2.svg" />}
+          title="医生管理系统"
+          subTitle={"数字化医院信息管理"/* intl.formatMessage({ id: 'pages.layouts.userLayout.title' }) */}
           initialValues={{
             autoLogin: true,
           }}
           actions={[
-            <FormattedMessage
-              key="loginWith"
-              id="pages.login.loginWith"
-              defaultMessage="其他登录方式"
-            />,
-            <AlipayCircleOutlined key="AlipayCircleOutlined" className={styles.icon} />,
-            <TaobaoCircleOutlined key="TaobaoCircleOutlined" className={styles.icon} />,
-            <WeiboCircleOutlined key="WeiboCircleOutlined" className={styles.icon} />,
+            // <FormattedMessage
+            //   key="loginWith"
+            //   id="pages.login.loginWith"
+            //   defaultMessage="其他登录方式"
+            // />,
+            // <AlipayCircleOutlined key="AlipayCircleOutlined" className={styles.icon} />,
+            // <TaobaoCircleOutlined key="TaobaoCircleOutlined" className={styles.icon} />,
+            // <WeiboCircleOutlined key="WeiboCircleOutlined" className={styles.icon} />,
           ]}
           onFinish={async (values) => {
             await handleSubmit(values as API.LoginParams);
