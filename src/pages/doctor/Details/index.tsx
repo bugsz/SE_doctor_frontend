@@ -6,41 +6,15 @@ import React, { useState } from 'react';
 import { Radio, Switch, Space, Descriptions, message, Avatar, Card, Row, Col } from 'antd';
 import type { ProFieldFCMode } from '@ant-design/pro-utils';
 
-import Field from '@ant-design/pro-field';
-import { ListDoctorDetails } from "./service";
+import { ListDoctorDetails, ListDoctorSchedule } from "./service";
 import {GridContent, PageContainer, RouteContext } from "@ant-design/pro-layout";
+
+import type { ProColumns } from '@ant-design/pro-components';
+import { ProTable } from '@ant-design/pro-components';
 
 
 const description = (currentDoctor) => {
     return (
-    // <div className="site-card-wrapper">
-    //     <Row gutter={16}>
-    //     <Col span={8}>
-    //         <Card bordered={false}>
-    //             <Descriptions className={styles.headerList} column={2}>
-    //             <Descriptions.Item label="姓名">{currentDoctor.doctor_name}</Descriptions.Item>
-    //             <Descriptions.Item label="性别">{currentDoctor.gender} </Descriptions.Item>
-                
-    //             <Descriptions.Item label="年龄">{currentDoctor.age} </Descriptions.Item>
-
-    //             <Descriptions.Item label="职位">{currentDoctor.position} </Descriptions.Item>
-
-    //             <Descriptions.Item label="科室">{currentDoctor.department} </Descriptions.Item>
-
-    //             </Descriptions>
-    //         </Card>
-    //     </Col>
-    //     <Col span={8}>
-    //         <Card bordered={false} 
-    //             cover={<img src={currentDoctor.photo}/>}
-    //             className={styles.avatarHolder}
-    //             style={{width: 90, height: 160}} />
-    //     </Col>
-    //     </Row>
-    // </div>
-
-    // <>
-    //    <Card bordered={false}>
             <Descriptions className={styles.headerList} column={2}>
             <Descriptions.Item label="姓名">{currentDoctor.doctor_name}</Descriptions.Item>
             <Descriptions.Item label="工号">{currentDoctor.doctor_id}</Descriptions.Item>
@@ -74,30 +48,47 @@ const Details = (props) => {
   const [tabStatus, setTabStatus] = useState({
     tabActiveKey: 'arrangement',
   });
+  const [currentDoctor, setCurrentDoctor] = useState({});
+  const [currentSchedule, setCurrentSchedule] = useState([]);
+  const [tableListDataSource, setTableListDataSource] = useState([]);
 
   // const id = props.match.params.id;
+
+
+  const createScheduleList = () => {
+    setTableListDataSource([])
+    for (let i=0;i<currentSchedule.length;i+=1) {
+      tableListDataSource.push({
+        name: currentDoctor?currentDoctor.doctor_name:"未知",
+        department: currentDoctor?currentDoctor.department:"未知",
+        schedule: transform(currentSchedule[i]),
+        availability: currentSchedule[i].availability,
+      })
+    }
+    console.log(tableListDataSource)
+  };
+
+  const get = async () => {
+    console.log(loadingProject)
+    await ListDoctorDetails(props.match.params.id).then(res => {
+      console.log(res);
+      setCurrentDoctor(res.data);
+    }).then(async () => {
+      console.log(loadingProject)
+      await ListDoctorSchedule(props.match.params.id).then(
+        res => {
+          const data = Array.from(res.data) 
+          setCurrentSchedule(data)
+          console.log(currentSchedule)
+        })
+    })
+  };
+
   const {
-      data: currentDoctor,
       run: refreshCurrent,
       loading: loadingProject, 
-  } = useRequest(
-      () => {
-    //   const doctor = ListDoctorDetails(props.match.params.id);
-    //   console.log(id, doctor);
-      return ListDoctorDetails(props.match.params.id);
-    },
+  } = useRequest(get,
     {
-        onSuccess: (data, param) => {
-        if (!data) {
-            message.error({
-            duration: 4,
-            content: '获取项目详情失败，请稍后重试',
-            });
-            return;
-        }
-        //注意修改当前的status状态
-        // changeProjectStatus(data.type);
-        },
         onError: (error, param) => {
         message.error({
             duration: 4,
@@ -107,12 +98,87 @@ const Details = (props) => {
     },
   );
 
+  const transform = (item) => {
+    let time_str, date_str
+    switch(item.time_id) {
+      case 1:
+        time_str = "上午"
+        break
+      case 2:
+        time_str = "下午"
+        break
+      case 3:
+        time_str = "晚上"
+        break
+      default:
+        time_str = "未知"
+        break
+    }
 
-  const arrangement = (
-      <h1>Header</h1>
+    date_str = item.schedule_id
+    return date_str + " " + time_str
+
+  }
+
+  const schedule = (
+    //{
+      <>{
+        loadingProject ? (null) : (
+          currentSchedule.length === 0 ? (<div>暂无排班</div>) :
+          currentSchedule.map((item, index) => {
+            return (
+              
+              <div key={index}>
+                <p>{transform(item)}</p>
+              </div>
+            )
+          })
+        )
+      }</>
   );
+
+  
+
+  const scheduleList = (
+    <ProTable<any>
+        columns={[
+          {
+            dataIndex: 'name',
+            title: '姓名',
+          },
+          {
+            dataIndex: 'department',
+            title: '部门',
+          },
+          {
+            dataIndex: 'schedule',
+            title: '时间',
+          },
+          {
+            title: '余量',
+            dataIndex: 'availability',
+          },
+        ]}
+        request={(params, sorter, filter) => {
+          // 表单搜索项会从 params 传入，传递给后端接口。
+          console.log(params, sorter, filter);
+          createScheduleList()
+          return Promise.resolve({
+            data: tableListDataSource,
+            success: true,
+          });
+        }}
+        rowKey="outUserNo"
+        pagination={{
+          showQuickJumper: true,
+        }}
+        toolBarRender={false}
+        search={false}
+      />
+  )
+
   const content = {
-      arrangement: arrangement
+      schedule: scheduleList
   };
   const onTabChange = (tabActiveKey) => {
       setTabStatus({ ...tabStatus, tabActiveKey });
@@ -132,7 +198,7 @@ const Details = (props) => {
          extraContent={avatar(currentDoctor)}
          tabList={[
              {
-                 key: 'arrangement',
+                 key: 'schedule',
                  tab: '排班',
              }
          ]}>

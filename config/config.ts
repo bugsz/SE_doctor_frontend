@@ -14,7 +14,7 @@ export default defineConfig({
   },
   layout: {
     // https://umijs.org/zh-CN/plugins/plugin-layout
-    locale: true,
+    locale: false,
     siderWidth: 208,
     ...defaultSettings,
   },
@@ -339,7 +339,7 @@ export default defineConfig({
       name: '医生诊断',
       path: './docter/diagnosis/:id',
       component: './diagnosis',
-      // hideInMenu: true,
+      hideInMenu: true,
     },
 
     {

@@ -58,7 +58,9 @@ const deleteDoctor = async (req, res) => {
 }
 
 
+
 export default {
   "GET /api/doctor/get": getDoctor,
   "DELETE /api/doctor/delete": deleteDoctor,
+  
 };

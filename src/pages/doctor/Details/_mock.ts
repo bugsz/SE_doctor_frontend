@@ -39,6 +39,29 @@ const getDoctorDetails = async (req, res) => {
   return res.json(result);
 }
 
+
+const getDoctorSchedule = async (req, res) => {
+  // console.log(req)
+  const result = {
+    success: true,
+    data: [
+      {
+        schedule_id: "20220429",
+        time_id: 1,
+        availability: 50
+      },
+      {
+        schedule_id: "20220430",
+        time_id: 2,
+        availability: 100
+      }
+    ]
+  }
+
+  return res.json(result)
+}
+
 export default {
   "GET /api/doctor/details": getDoctorDetails,
+  "GET /api/doctor/schedule": getDoctorSchedule,
 };

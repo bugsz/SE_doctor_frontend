@@ -3,15 +3,25 @@ import { request } from 'umi';
 export async function ListDoctorDetails(id, data, options) {
   console.log(id);
   console.log(options);
-  return request("/api/doctor/details", {
+  const doctorDetail = request("/api/doctor/details", {
     method: "GET",
     params: {id: id},
   })
+
+
+  return doctorDetail
 };
 
-export async function t(params) {
-    return request("/api/doctor/get", {
-        method: "GET",
-        params: params,
-    })
-};
+export async function ListDoctorSchedule(id, time_delta=2) {
+  const doctorArrangement = request("/api/doctor/schedule", {
+    method: "GET",
+    params: {
+      doctor_id: id,
+      time_delta: time_delta  
+    }
+  })
+
+  // console.log(doctorArrangement)
+
+  return doctorArrangement
+}
