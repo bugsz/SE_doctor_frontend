@@ -22,7 +22,7 @@ const getPatientInfo = (_: Request, res: Response) => {
     status: 200,
     msg: 'success',
     data: {
-      id: '123456',
+      id: 'D1',
       name: '张三',
       gender: '男',
       age: 24,

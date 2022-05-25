@@ -19,7 +19,7 @@ const Diagnosis: FC = () => {
   // });
 
   const { loading: patientInfoLoading, data: _patientInfo } = useRequest(queryPatientInfo, {
-    defaultParams: useParams<IParam>(),
+    defaultParams: [useParams<IParam>()],
   });
 
   const patientInfo = _patientInfo!;
