@@ -378,7 +378,7 @@ export default defineConfig({
       name: "查看排班",
       icon: "table",
       path: '/TimeTable_New',
-      component: "./TimeTable_New"
+      component: "./TimeTable"
     },
 
     
