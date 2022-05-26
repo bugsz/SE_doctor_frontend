@@ -367,7 +367,19 @@ export default defineConfig({
       hideInMenu: true,
     },
 
-    
+    {
+      name: "排班管理",
+      icon: "table",
+      path: '/TimeTable_Change',
+      component: "./TimeTable_Change/ManageNew"
+    },
+
+    {
+      name: "查看排班",
+      icon: "table",
+      path: '/TimeTable_New',
+      component: "./TimeTable_New"
+    },
 
     
     {
@@ -383,6 +395,20 @@ export default defineConfig({
       hideInMenu: true,
       component: './doctor/Edit',
     },
+
+    {
+      path: "/TimeTable_Change/details/:date",
+      name: "排班详情",
+      hideInMenu: true,
+      component: "./TimeTable_Change/Details",
+    },
+
+    {
+      path: "/TimeTable_Change/edit/:date",
+      name: "排班编辑",
+      hideInMenu: true,
+      component: "./TimeTable_Change/Edit",
+    }
   ],
   // Theme for antd: https://ant.design/docs/react/customize-theme-cn
   theme: {

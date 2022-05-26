@@ -1,0 +1,85 @@
+@import '~antd/es/style/themes/default.less';
+
+.main {
+  :global {
+    .ant-descriptions-row > td {
+      padding-bottom: 8px;
+    }
+    .ant-page-header-heading-extra {
+      flex-direction: column;
+    }
+  }
+}
+
+.headerList {
+  margin-bottom: 4px;
+  font-size: 28px;
+  :global {
+    .ant-descriptions-row > td {
+      padding-bottom: 8px;
+    }
+  }
+
+  .ant-descriptions-row {
+    font-size: 24px;
+  }
+
+  .stepDescription {
+    position: relative;
+    left: 38px;
+    padding-top: 8px;
+    font-size: 20px;
+    text-align: left;
+
+    > div {
+      margin-top: 8px;
+      margin-bottom: 4px;
+    }
+  }
+}
+
+.pageHeader {
+  :global {
+    .ant-page-header-heading-extra > * + * {
+      margin-left: 8px;
+    }
+  }
+  .moreInfo {
+    display: flex;
+    justify-content: space-between;
+    width: 120px;
+    // height: 180px
+  }
+}
+
+.avatarHolder {
+  margin-bottom: 24px;
+  text-align: center;
+
+  & > img {
+    width: 90px;
+    height: 160px;
+    margin-bottom: 20px;
+  }
+
+  .name {
+    margin-bottom: 4px;
+    color: @heading-color;
+    font-weight: 500;
+    font-size: 20px;
+    line-height: 28px;
+  }
+}
+
+@media screen and (max-width: @screen-sm) {
+  .stepDescription {
+    left: 8px;
+  }
+  .pageHeader {
+    :global {
+      .ant-pro-page-header-wrap-row {
+        flex-direction: column;
+      }
+    }
+  }
+}
