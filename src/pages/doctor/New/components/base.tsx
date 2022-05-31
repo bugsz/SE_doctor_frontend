@@ -54,6 +54,8 @@ const BaseView: React.FC<BaseViewProps> = ( {id, children} ) => {
   //   return ListDoctorDetails(id);
   // });
 
+  // TODO 在这边是不是要请求一个api 获取新建的用户id
+
   const loading = false;
   const currentUser = {
     doctor_id: "",
@@ -128,6 +130,19 @@ const BaseView: React.FC<BaseViewProps> = ( {id, children} ) => {
               hideRequiredMark
             >
               <ProFormText
+                // disabled
+                width="md"
+                name="doctor_id"
+                label="工号"
+                rules={[
+                  {
+                    required: true,
+                    message: '请输入工号!',
+                  },
+                ]}
+              />
+
+              <ProFormText
                 width="md"
                 name="doctor_name"
                 label="姓名"
@@ -162,7 +177,7 @@ const BaseView: React.FC<BaseViewProps> = ( {id, children} ) => {
                 ]}
               />
 
-              <ProFormText
+              {/* <ProFormText
                 width="md"
                 name="department"
                 label="科室"
@@ -172,31 +187,44 @@ const BaseView: React.FC<BaseViewProps> = ( {id, children} ) => {
                     message: '请输入科室!',
                   },
                 ]}
+              /> */}
+
+              <ProFormSelect
+                width="xs"
+                options={[
+                  {
+                    value: '口腔科',
+                    label: '口腔科',
+                  },
+                  {
+                    value: "内科",
+                    label: "内科",
+                  },
+                ]}
+                name="department"
+                label="科室"
               />
 
-              <ProFormText
-                width="md"
+              <ProFormSelect
+                width="xs"
+                options={[
+                  {
+                    value: "砖家",
+                    label: "砖家",
+                  },
+                  {
+                    value: '主任医师',
+                    label: '主任医师',
+                  },
+                  {
+                    value: "主治医师",
+                    label: "主治医师",
+                  },
+                ]}
                 name="position"
                 label="职位"
-                rules={[
-                  {
-                    required: true,
-                    message: '请输入职位!',
-                  },
-                ]}
               />
 
-            <ProFormText
-                width="md"
-                name="doctor_id"
-                label="工号"
-                rules={[
-                  {
-                    required: true,
-                    message: '请输入工号!',
-                  },
-                ]}
-              />
 
             </ProForm>
           </div>
