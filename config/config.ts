@@ -360,12 +360,7 @@ export default defineConfig({
       component: './doctor/ManageNew',
     },
 
-    {
-      name: '医生诊断',
-      path: './doctor/diagnosis/:id',
-      component: './diagnosis',
-      hideInMenu: true,
-    },
+    
 
     {
       name: "排班管理",
@@ -381,6 +376,12 @@ export default defineConfig({
       component: "./TimeTable"
     },
 
+    {
+      name: '医生诊断',
+      path: './patient_register/diagnosis/:id',
+      component: './diagnosis',
+      hideInMenu: true,
+    },
     
     {
       path: '/doctor/details/:id',

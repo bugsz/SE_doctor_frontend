@@ -7,7 +7,7 @@ import request from 'umi-request';
 import type { patientItem } from './data.d';
 
 function getPatientInfoUrl(record: patientItem) {
-  return `/doctor/diagnosis/${record.patient_id}`;
+  return `/patient_register/diagnosis/${record.patient_id}`;
 }
 
 const columns: ProColumns<patientItem>[] = [
