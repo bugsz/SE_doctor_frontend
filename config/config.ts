@@ -345,22 +345,21 @@ export default defineConfig({
       component: './patient_register/ManageNew',
     },
 
-    {
-      name: '医生列表',
-      icon: 'table',
-      path: '/doctor_old',
-      component: './doctor/Manage',
-      hideInMenu: true,
-    },
 
     {
       name: '医生列表',
       icon: 'table',
       path: '/doctor',
-      component: './doctor/ManageNew',
+      component: './doctor/Manage',
     },
 
-    
+    {
+      name: "新建医生",
+      icon: 'user',
+      path: '/doctor/new',
+      component: './doctor/New',
+      hideInMenu: true,
+    },
 
     {
       name: "排班管理",
@@ -372,7 +371,7 @@ export default defineConfig({
     {
       name: "查看排班",
       icon: "table",
-      path: '/TimeTable_New',
+      path: '/TimeTable',
       component: "./TimeTable"
     },
 
