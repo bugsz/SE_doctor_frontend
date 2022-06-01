@@ -23,6 +23,7 @@ function getCurrentUser(req, res) {
     age: 24,
     department: "口腔",
     position: "主任医师",
+    unreadCount: 0
   }
   return res.json({
     success: true,

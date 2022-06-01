@@ -16,12 +16,12 @@ import { ProTable } from '@ant-design/pro-components';
 const description = (currentDoctor) => {
     return (
             <Descriptions className={styles.headerList} column={2}>
-            <Descriptions.Item label="姓名">{currentDoctor.doctor_name}</Descriptions.Item>
+            <Descriptions.Item label="姓名">{currentDoctor.name}</Descriptions.Item>
             <Descriptions.Item label="工号">{currentDoctor.doctor_id}</Descriptions.Item>
             <Descriptions.Item label="性别">{currentDoctor.gender} </Descriptions.Item>
             <Descriptions.Item label="年龄">{currentDoctor.age} </Descriptions.Item>
             <Descriptions.Item label="职位">{currentDoctor.position} </Descriptions.Item>
-            <Descriptions.Item label="科室">{currentDoctor.department} </Descriptions.Item>
+            <Descriptions.Item label="科室">{currentDoctor.dept_id} </Descriptions.Item>
 
             </Descriptions>
     //    </Card>

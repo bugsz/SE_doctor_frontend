@@ -5,7 +5,7 @@ export async function ListDoctorDetails(id, data, options) {
   console.log(options);
   const doctorDetail = request("/api/doctor/details", {
     method: "GET",
-    params: {id: id},
+    params: {doctor_id: id},
   })
 
   return doctorDetail

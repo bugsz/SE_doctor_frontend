@@ -62,6 +62,6 @@ const getDoctorSchedule = async (req, res) => {
 }
 
 export default {
-  "GET /api/doctor/details": getDoctorDetails,
-  "GET /api/doctor/schedule": getDoctorSchedule,
+  // "GET /api/doctor/details": getDoctorDetails,
+  // "GET /api/doctor/schedule": getDoctorSchedule,
 };

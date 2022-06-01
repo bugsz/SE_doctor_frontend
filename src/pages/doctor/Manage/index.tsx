@@ -86,7 +86,7 @@ const columns: ProColumns<doctorItem>[] = [
   {
     title: '部门',
     key: 'department',
-    dataIndex: 'department',
+    dataIndex: 'dept_id',
     // valueType: 'string',
     // sorter: true,
     // hideInSearch: true,
