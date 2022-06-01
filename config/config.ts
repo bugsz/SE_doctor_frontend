@@ -320,7 +320,7 @@ export default defineConfig({
     },
 
     {
-      name: '个人设置',
+      name: '个人信息',
       icon: 'user',
       path: '/me',
       component: './me/Setting'

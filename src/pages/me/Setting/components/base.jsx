@@ -19,14 +19,14 @@ const AvatarView = ({ avatar }) => (
     <div className={styles.avatar}>
       <img src={avatar} alt="avatar" />
     </div>
-    <Upload showUploadList={false}>
+    {/* <Upload showUploadList={false}>
       <div className={styles.button_view}>
         <Button>
           <UploadOutlined />
           更换头像
         </Button>
       </div>
-    </Upload>
+    </Upload> */}
   </>
 );
 
@@ -93,14 +93,32 @@ const BaseView = () => {
                     display: 'none',
                   },
                 },
+
                 submitButtonProps: {
-                  children: '更新基本信息',
+                  style: {
+                    display: "none",
+                  },
+                  // children: '更新基本信息',
                 },
               }}
               initialValues={{ ...currentUser }}
               hideRequiredMark
             >
               <ProFormText
+                  disabled
+                  width="md"
+                  name="doctor_id"
+                  label="工号"
+                  rules={[
+                    {
+                      required: true,
+                      message: '请输入您的年龄!',
+                    },
+                  ]}
+                />
+
+              <ProFormText
+                disabled
                 width="md"
                 name="doctor_name"
                 label="姓名"
@@ -112,6 +130,7 @@ const BaseView = () => {
                 ]}
               />
               <ProFormText
+                disabled
                 width="md"
                 name="gender"
                 label="性别"
@@ -124,6 +143,7 @@ const BaseView = () => {
               />
 
               <ProFormText
+                disabled
                 width="md"
                 name="age"
                 label="年龄"
@@ -136,6 +156,7 @@ const BaseView = () => {
               />
 
               <ProFormText
+                disabled
                 width="md"
                 name="department"
                 label="科室"
@@ -148,6 +169,7 @@ const BaseView = () => {
               />
 
               <ProFormText
+                disabled
                 width="md"
                 name="position"
                 label="职位"
@@ -159,17 +181,7 @@ const BaseView = () => {
                 ]}
               />
 
-            <ProFormText
-                width="md"
-                name="doctor_id"
-                label="工号"
-                rules={[
-                  {
-                    required: true,
-                    message: '请输入您的年龄!',
-                  },
-                ]}
-              />
+            
 
               {/* <ProFormText
                 name="userDepartment"
