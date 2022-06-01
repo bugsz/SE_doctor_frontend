@@ -6,10 +6,13 @@
  * For details, please see
  * https://pro.ant.design/docs/deploy
  */
+
+const deploy_api = "http://101.35.15.247:10078/"
 export default {
   dev: {
     '/api/': {
-      target: 'https://preview.pro.ant.design',
+      // target: 'https://preview.pro.ant.design',
+      target: deploy_api, 
       changeOrigin: true,
       pathRewrite: { '^': '' },
     },

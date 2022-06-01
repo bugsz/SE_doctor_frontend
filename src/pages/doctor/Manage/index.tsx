@@ -7,7 +7,7 @@ import request from 'umi-request';
 import { doctorItem } from './data.js';
 import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
 import { history } from 'umi';
-import { DeleteDoctor } from './service';
+import { DeleteDoctor, ListDoctor } from './service';
 
 function getInfoUrl(record: doctorItem) {
   return `/doctor/details/${record.doctor_id}`;
@@ -134,16 +134,34 @@ const Manage = () => {
       columns={columns}
       actionRef={actionRef}
       cardBordered
-      request={async (params = {}, sort, filter) => {
-        // console.log(sort, filter);
-        // console.log(params);
-        // console.log(params.name);
-        return request<{
-          data: doctorItem[];
-        }>('/api/doctor/get', {
-          params,
-        });
-      }}
+      // request={async (params = {}, sort, filter) => {
+      //   // console.log(sort, filter);
+      //   // console.log(params);
+      //   // console.log(params.name);
+      //   return request<{
+      //     data: doctorItem[];
+      //   }>('/api/doctor/get', {
+      //     params,
+      //   });
+      // }}
+
+      request= {
+        async (params = {}, sort, filter) => {
+          const response = await ListDoctor(params).then(res => {
+            // console.log(res.data.dataSource)
+            console.log(res.data)
+            const result = {
+              data: res.data.doctor_list,
+              total: res.data.return_count,
+              success: res.success,
+              pageSize: res.pageSize,
+              current: res.current,
+            }
+            return result
+          })
+          return Promise.resolve(response)
+        }
+      }
       editable={{
         type: 'multiple',
       }}

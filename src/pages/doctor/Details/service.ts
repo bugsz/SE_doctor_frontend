@@ -8,7 +8,6 @@ export async function ListDoctorDetails(id, data, options) {
     params: {id: id},
   })
 
-
   return doctorDetail
 };
 

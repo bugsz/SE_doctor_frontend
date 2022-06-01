@@ -58,6 +58,6 @@ const deleteDoctor = async (req, res) => {
 
 
 export default {
-  "GET /api/TimeTable_Change/get": getDoctor,
-  "DELETE /api/TimeTable_Change/delete": deleteDoctor,
+  // "GET /api/TimeTable_Change/get": getDoctor,
+  // "DELETE /api/TimeTable_Change/delete": deleteDoctor,
 };
