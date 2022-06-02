@@ -339,7 +339,7 @@ export default defineConfig({
 
 
     {
-      name: '医生叫号',
+      name: '挂号名单',
       icon: 'table',
       path: '/patient_register',
       component: './patient_register/ManageNew',
