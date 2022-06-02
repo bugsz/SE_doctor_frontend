@@ -54,6 +54,6 @@ const getPatient = async (req, res) => {
 
 
 export default {
-  "GET /api/register/get": getPatient,
+  // "GET /api/register/get": getPatient,
   // "DELETE /api/doctor/delete": deleteDoctor,
 };

@@ -114,5 +114,5 @@ const getAnnounce = (_: Request, res: Response) => {
 };
 
 export default {
-  'GET  /api/announce/get': getAnnounce,
+  // 'GET  /api/announce/get': getAnnounce,
 };
