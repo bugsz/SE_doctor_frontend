@@ -24,8 +24,8 @@ function getEditUrl(record: doctorItem) {
 
 const deleteDoctor = async (id) => {
   try {
-    const msg = await DeleteDoctor({ id });
-    if (msg.status === 'success') {
+    const msg = await DeleteDoctor({ doctor_id: id });
+    if (msg.status === 100) {
       notification.success({
         duration: 4,
         description: '删除成功',

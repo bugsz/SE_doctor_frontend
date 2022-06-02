@@ -22,14 +22,14 @@ export async function ListDoctorDetails(id, data, options) {
   console.log(options);
   return request("/api/doctor/details", {
     method: "GET",
-    params: {id: id},
+    params: {doctor_id: id},
   })
 };
 
-export async function UpdateDoctorInfo(id, data, options) {
-  return request("/api/doctor/update", {
+export async function ModifyDoctorInfo(id, data, options) {
+  return request("/api/doctor/modify", {
     method: "POST",
-    params: {id: id},
+    params: {doctor_id: id},
     data: data,
   });
 }

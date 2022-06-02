@@ -1,5 +1,5 @@
 import React, { ReactNode } from 'react';
-import { UploadOutlined } from '@ant-design/icons';
+import { ControlOutlined, UploadOutlined } from '@ant-design/icons';
 import { Button, Input, Upload, message, notification } from 'antd';
 import ProForm, {
   ProFormDependency,
@@ -11,7 +11,7 @@ import ProForm, {
 import { useRequest } from 'umi';
 
 import styles from './BaseView.less';
-import { ListDoctorDetails, UpdateDoctorInfo } from '../service';
+import { AddDoctorInfo, ListDoctorDetails } from '../service';
 
 const validatorPhone = (rule: any, value: string[], callback: (message?: string) => void) => {
   if (!value[0]) {
@@ -45,19 +45,19 @@ interface BaseViewProps {
   children?: ReactNode;
 }
 const BaseView: React.FC<BaseViewProps> = ( {id, children} ) => {
-  // const id = props.id;
-  // const {
-  //   data: currentUser,
-  //   run: refreshCurrent,
-  //   loading,
-  // } = useRequest(() => {
-  //   return ListDoctorDetails(id);
-  // });
+  // let id = props.id;
+  let {
+    data: currentUser,
+    run: refreshCurrent,
+    loading,
+  } = useRequest(() => {
+    return ListDoctorDetails(id);
+  });
 
   // TODO 在这边是不是要请求一个api 获取新建的用户id
 
-  const loading = false;
-  const currentUser = {
+  loading = false;
+  currentUser = {
     doctor_id: "",
     doctor_name: "",
     department: "",
@@ -79,13 +79,13 @@ const BaseView: React.FC<BaseViewProps> = ( {id, children} ) => {
   };
 
   const handleFinish = async (values) => {
-    console.log(values);
     try {
-      const msg = await UpdateDoctorInfo(id, values);
-      if (msg.status === 'success') {
+      const msg = await AddDoctorInfo(id, values, {});
+      console.log(msg)
+      if (msg.status === 100) {
         notification.success({
           duration: 4,
-          description: '个人信息更新成功',
+          description: '添加成功',
           message: '更新成功',
         });
         window.history.back();

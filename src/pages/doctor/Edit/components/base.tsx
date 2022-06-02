@@ -2,16 +2,13 @@ import React, { ReactNode } from 'react';
 import { UploadOutlined } from '@ant-design/icons';
 import { Button, Input, Upload, message, notification } from 'antd';
 import ProForm, {
-  ProFormDependency,
-  ProFormFieldSet,
   ProFormSelect,
   ProFormText,
-  ProFormTextArea,
 } from '@ant-design/pro-form';
 import { useRequest } from 'umi';
 
 import styles from './BaseView.less';
-import { ListDoctorDetails, UpdateDoctorInfo } from '../service';
+import { ListDoctorDetails, ModifyDoctorInfo } from '../service';
 
 const validatorPhone = (rule: any, value: string[], callback: (message?: string) => void) => {
   if (!value[0]) {
@@ -68,8 +65,9 @@ const BaseView: React.FC<BaseViewProps> = ( {id, children} ) => {
   const handleFinish = async (values) => {
     console.log(values);
     try {
-      const msg = await UpdateDoctorInfo(id, values);
-      if (msg.status === 'success') {
+      const msg = await ModifyDoctorInfo(id, values);
+      // console.log(msg)
+      if (msg.status === 100) {
         notification.success({
           duration: 4,
           description: '个人信息更新成功',
@@ -131,7 +129,7 @@ const BaseView: React.FC<BaseViewProps> = ( {id, children} ) => {
 
               <ProFormText
                 width="md"
-                name="doctor_name"
+                name="name"
                 label="姓名"
                 rules={[
                   {
@@ -188,7 +186,7 @@ const BaseView: React.FC<BaseViewProps> = ( {id, children} ) => {
                     label: "内科",
                   },
                 ]}
-                name="department"
+                name="dept_id"
                 label="科室"
               />
 

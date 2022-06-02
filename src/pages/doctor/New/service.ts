@@ -26,10 +26,11 @@ export async function ListDoctorDetails(id, data, options) {
   })
 };
 
-export async function UpdateDoctorInfo(id, data, options) {
-  return request("/api/doctor/update", {
+export async function AddDoctorInfo(id, data, options) {
+  console.log("add")
+  console.log(data)
+  return request("/api/doctor/add", {
     method: "POST",
-    params: {id: id},
     data: data,
   });
 }
