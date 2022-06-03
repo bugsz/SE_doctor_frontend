@@ -1,11 +1,12 @@
+import { currentUser } from '@/services/ant-design-pro/api';
 import { PageContainer } from '@ant-design/pro-layout';
 import { Avatar, Card, Col, List, Row, Skeleton, Statistic } from 'antd';
 import moment from 'moment';
 import type { FC } from 'react';
-import { Link, useRequest } from 'umi';
+import { Link, useModel, useRequest } from 'umi';
 import EditableLinkGroup from './components/EditableLinkGroup';
 import type { AnnounceType, CurrentUser } from './data';
-import { queryAnnounce } from './service';
+import { queryAnnounce} from './service';
 import styles from './style.less';
 
 const links = [
@@ -35,7 +36,9 @@ const links = [
   },
 ];
 
-const PageHeaderContent: FC<{ currentUser: Partial<CurrentUser> }> = ({ currentUser }) => {
+
+const PageHeaderContent = ({ currentUser }) => {
+
   const loading = currentUser && Object.keys(currentUser).length;
   if (!loading) {
     return <Skeleton avatar paragraph={{ rows: 1 }} active />;
@@ -48,7 +51,7 @@ const PageHeaderContent: FC<{ currentUser: Partial<CurrentUser> }> = ({ currentU
       <div className={styles.content}>
         <div className={styles.contentTitle}>
           早安，
-          {currentUser.name}医生 ，祝你开心每一天！
+          {currentUser.name} 医生 ，祝你开心每一天！
         </div>
         {/* <div>
           {currentUser.title} |{currentUser.group}
@@ -58,19 +61,32 @@ const PageHeaderContent: FC<{ currentUser: Partial<CurrentUser> }> = ({ currentU
   );
 };
 
-const ExtraContent: FC<Record<string, any>> = () => (
-  <div className={styles.extraContent}>
-    <div className={styles.statItem}>
-      <Statistic title={moment().format('yyyy年MM月D日')} value={moment().format('dddd')} />
-    </div>
-    <div className={styles.statItem}>
-      <Statistic title="科室" value={'口腔科'} />
-    </div>
-  </div>
-);
+const ExtraContent: FC<Record<string, any>> = (currentUser) => {
+    const loading = currentUser && Object.keys(currentUser).length;
+
+    if (!loading) {
+      return <Skeleton avatar paragraph={{ rows: 1 }} active />;
+    }
+    console.log(currentUser)
+
+    return (
+      <div className={styles.extraContent}>
+        <div className={styles.statItem}>
+          <Statistic title={moment().format('yyyy年MM月D日')} value={moment().format('dddd')} />
+        </div>
+        <div className={styles.statItem}>
+          <Statistic title="科室" value="口腔科" />
+        </div>
+      </div>
+    )
+};
 
 const Board: FC = () => {
   const { loading: announceLoading, data: data } = useRequest(queryAnnounce);
+
+  const { initialState, setInitialState } = useModel('@@initialState');
+  const { currentUser } = initialState;
+
 
   const announce = data?.announce;
 
@@ -105,18 +121,13 @@ const Board: FC = () => {
     <PageContainer
       content={
         <PageHeaderContent
-          currentUser={{
-            avatar: 'https://gw.alipayobjects.com/zos/rmsportal/BiazfanxmamNRoxxVxka.png',
-            name: 'sz',
-            userid: '00000001',
-            email: 'antdesign@alipay.com',
-            // signature: '海纳百川，有容乃大',
-            // title: '交互专家',
-            // group: '蚂蚁金服－某某某事业群－某某平台部－某某技术部－UED',
-          }}
-        />
-      }
-      extraContent={<ExtraContent />}
+          currentUser={currentUser}/>
+        }
+
+      extraContent={
+        <ExtraContent 
+          currentUser={currentUser} />
+        }
     >
       <Row gutter={24}>
         <Col xl={16} lg={24} md={24} sm={24} xs={24}>

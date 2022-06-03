@@ -76,12 +76,12 @@ const AvatarDropdown: React.FC<GlobalHeaderRightProps> = ({ menu }) => {
           个人中心
         </Menu.Item>
       )}
-      {menu && (
+      {/* {menu && (
         <Menu.Item key="settings">
           <SettingOutlined />
           个人设置
         </Menu.Item>
-      )}
+      )} */}
       {menu && <Menu.Divider />}
 
       <Menu.Item key="logout">

@@ -322,7 +322,7 @@ export default defineConfig({
     {
       name: '个人信息',
       icon: 'user',
-      path: '/me',
+      path: '/account/center',
       component: './me/Setting'
       // routes: [
       //   {
@@ -351,6 +351,7 @@ export default defineConfig({
       icon: 'table',
       path: '/doctor',
       component: './doctor/Manage',
+      // access: "canAdmin",
     },
 
     {
@@ -359,13 +360,15 @@ export default defineConfig({
       path: '/doctor/new',
       component: './doctor/New',
       hideInMenu: true,
+      access: "canAdmin",
     },
 
     {
       name: "排班管理",
       icon: "table",
       path: '/TimeTable_Change',
-      component: "./TimeTable_Change/ManageNew"
+      component: "./TimeTable_Change/ManageNew",
+      access: "canAdmin"
     },
 
     {
@@ -394,6 +397,7 @@ export default defineConfig({
       name: '医生编辑',
       hideInMenu: true,
       component: './doctor/Edit',
+      access: "canAdmin",
     },
 
     {
