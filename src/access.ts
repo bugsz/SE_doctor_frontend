@@ -3,7 +3,8 @@
  * */
 export default function access(initialState: { currentUser? }) {
   const { currentUser } = initialState || {};
+  console.log(currentUser);
   return {
-    canAdmin: currentUser && currentUser.role === 'admin',
+    canAdmin: currentUser && currentUser.access === 2,
   };
 }

@@ -10,7 +10,7 @@ const { Item } = Menu;
 
 const Settings = () => {
   const menuMap = {
-    base: '基本设置',
+    base: "个人信息",
     // security: '安全设置',
     // binding: '账号绑定',
     // notification: '新消息通知',

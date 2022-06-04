@@ -63,18 +63,19 @@ export const layout: RunTimeLayoutConfig = ({ initialState }) => {
         history.push(loginPath);
       }
     },
-    links: isDev
-      ? [
-          <Link to="/umi/plugin/openapi" target="_blank">
-            <LinkOutlined />
-            <span>OpenAPI 文档</span>
-          </Link>,
-          <Link to="/~docs">
-            <BookOutlined />
-            <span>业务组件文档</span>
-          </Link>,
-        ]
-      : [],
+    // links: isDev
+    //   ? [
+    //       <Link to="/umi/plugin/openapi" target="_blank">
+    //         <LinkOutlined />
+    //         <span>OpenAPI 文档</span>
+    //       </Link>,
+    //       <Link to="/~docs">
+    //         <BookOutlined />
+    //         <span>业务组件文档</span>
+    //       </Link>,
+    //     ]
+    //   : [],
+    links: [],
     menuHeaderRender: undefined,
     // 自定义 403 页面
     // unAccessible: <div>unAccessible</div>,

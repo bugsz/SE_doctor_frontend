@@ -11,28 +11,12 @@ import styles from './style.less';
 
 const links = [
   {
-    title: '操作一',
-    href: '',
+    title: '查看排班',
+    href: '/timetable',
   },
   {
-    title: '操作二',
-    href: '',
-  },
-  {
-    title: '操作三',
-    href: '',
-  },
-  {
-    title: '操作四',
-    href: '',
-  },
-  {
-    title: '操作五',
-    href: '',
-  },
-  {
-    title: '操作六',
-    href: '',
+    title: '叫号',
+    href: '/patient_register',
   },
 ];
 
@@ -61,13 +45,14 @@ const PageHeaderContent = ({ currentUser }) => {
   );
 };
 
-const ExtraContent: FC<Record<string, any>> = (currentUser) => {
+const ExtraContent = ( {currentUser} ) => {
     const loading = currentUser && Object.keys(currentUser).length;
 
     if (!loading) {
       return <Skeleton avatar paragraph={{ rows: 1 }} active />;
     }
-    console.log(currentUser)
+
+
 
     return (
       <div className={styles.extraContent}>
@@ -75,7 +60,7 @@ const ExtraContent: FC<Record<string, any>> = (currentUser) => {
           <Statistic title={moment().format('yyyy年MM月D日')} value={moment().format('dddd')} />
         </div>
         <div className={styles.statItem}>
-          <Statistic title="科室" value="口腔科" />
+          <Statistic title="科室" value={currentUser.department} />
         </div>
       </div>
     )

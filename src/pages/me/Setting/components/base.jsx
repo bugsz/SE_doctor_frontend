@@ -10,7 +10,6 @@ import ProForm, {
 } from '@ant-design/pro-form';
 import { useRequest } from 'umi';
 import { queryCurrent } from '../service';
-import { updateInfo } from '../service';
 import styles from './BaseView.less';
 
 const AvatarView = ({ avatar }) => (

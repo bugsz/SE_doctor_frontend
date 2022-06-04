@@ -29,7 +29,7 @@ export async function ListDoctorDetails(id, data, options) {
 export async function AddDoctorInfo(id, data, options) {
   console.log("add")
   console.log(data)
-  return request("/api/doctor/add", {
+  return request("/api/doctor/create", {
     method: "POST",
     data: data,
   });
