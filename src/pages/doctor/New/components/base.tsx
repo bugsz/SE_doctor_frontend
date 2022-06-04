@@ -7,6 +7,7 @@ import ProForm, {
   ProFormSelect,
   ProFormText,
   ProFormTextArea,
+  ProFormDigit
 } from '@ant-design/pro-form';
 import { useRequest } from 'umi';
 
@@ -149,45 +150,44 @@ const BaseView: React.FC<BaseViewProps> = ( {id, children} ) => {
                 rules={[
                   {
                     required: true,
-                    message: '请输入您的姓名!',
-                  },
-                ]}
-              />
-              <ProFormText
-                width="md"
-                name="gender"
-                label="性别"
-                rules={[
-                  {
-                    required: true,
-                    message: '请输入您的性别!',
+                    message: '请输入姓名!',
                   },
                 ]}
               />
 
-              <ProFormText
+              <ProFormDigit
                 width="md"
                 name="age"
                 label="年龄"
                 rules={[
                   {
                     required: true,
-                    message: '请输入您的年龄!',
+                    message: '请输入年龄!',
+                  }, 
+                ]}/>
+
+              <ProFormSelect
+                width="xs"
+                options={[
+                  {
+                    value: '男',
+                    label: '男',
+                  },
+                  {
+                    value: "女",
+                    label: "女",
                   },
                 ]}
-              />
+                name="gender"
+                label="性别"
 
-              {/* <ProFormText
-                width="md"
-                name="department"
-                label="科室"
                 rules={[
                   {
                     required: true,
-                    message: '请输入科室!',
-                  },
+                    message: '请选择性别!',
+                  }, 
                 ]}
-              /> */}
+              />
 
               <ProFormSelect
                 width="xs"
@@ -203,6 +203,12 @@ const BaseView: React.FC<BaseViewProps> = ( {id, children} ) => {
                 ]}
                 name="department"
                 label="科室"
+                rules={[
+                  {
+                    required: true,
+                    message: '请选择科室!',
+                  }, 
+                ]}
               />
 
               <ProFormSelect
@@ -223,6 +229,12 @@ const BaseView: React.FC<BaseViewProps> = ( {id, children} ) => {
                 ]}
                 name="position"
                 label="职位"
+                rules={[
+                  {
+                    required: true,
+                    message: '请选择职位!',
+                  }, 
+                ]}
               />
 
 

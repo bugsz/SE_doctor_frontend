@@ -40,7 +40,7 @@ const EditableLinkGroup = (props) => {
       {links.map((link) => (
         <Button
           style={{ marginLeft: 20 }}
-          size="small"
+          size="middle"
           type="primary"
           ghost
           href={link.href}

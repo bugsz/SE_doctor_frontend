@@ -134,16 +134,6 @@ const Manage = () => {
       columns={columns}
       actionRef={actionRef}
       cardBordered
-      // request={async (params = {}, sort, filter) => {
-      //   // console.log(sort, filter);
-      //   // console.log(params);
-      //   // console.log(params.name);
-      //   return request<{
-      //     data: doctorItem[];
-      //   }>('/api/doctor/get', {
-      //     params,
-      //   });
-      // }}
 
       request= {
         async (params = {}, sort, filter) => {
