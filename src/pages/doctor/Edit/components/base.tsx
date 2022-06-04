@@ -178,14 +178,38 @@ const BaseView: React.FC<BaseViewProps> = ( {id, children} ) => {
                 width="xs"
                 options={[
                   {
-                    value: '口腔科',
-                    label: '口腔科',
+                      value: '口腔科',
+                      label: '口腔科',
                   },
                   {
-                    value: "内科",
-                    label: "内科",
+                      value: "骨科",
+                      label: "骨科",
                   },
-                ]}
+                  {
+                      value: '肛肠科',
+                      label: '肛肠科',
+                  },
+                  {
+                      value: "普通外科",
+                      label: "普通外科",
+                  },
+                  {
+                      value: '呼吸内科',
+                      label: '呼吸内科',
+                  },
+                  {
+                      value: "传染科",
+                      label: "传染科",
+                  },
+                  {
+                      value: '心血管科',
+                      label: '心血管科',
+                  },
+                  {
+                      value: "消化内科",
+                      label: "消化内科",
+                  },
+              ]}
                 name="dept_id"
                 label="科室"
                 rules={[
@@ -200,8 +224,8 @@ const BaseView: React.FC<BaseViewProps> = ( {id, children} ) => {
                 width="xs"
                 options={[
                   {
-                    value: "砖家",
-                    label: "砖家",
+                    value: "专家",
+                    label: "专家",
                   },
                   {
                     value: '主任医师',
