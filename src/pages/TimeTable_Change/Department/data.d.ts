@@ -28,9 +28,7 @@
 //   members: Member[];
 // };
 
-export type scheduleItem = {
-  date: string;
-  section: string;
-  doctor: string;
-  moreUrl: string;
+export type departmentItem = {
+  main_department: string;
+  department: string;
 };

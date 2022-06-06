@@ -6,19 +6,23 @@ const getDoctorDetails = async (req, res) => {
   const doctorData: doctorItem[] = [
     {
       date: "2022-5-25",
-      department: "普通外科1",
+      section: "下午",
+      doctor: "cyh,wlx",
     },
     {
-      date: "2022-5-26",
-      department: "普通外科2",
+      date: "2022-5-25",
+      section: "下午",
+      doctor: "cyh,wlx",
     },
     {
-      date: "2022-5-27",
-      department: "普通外科3",
+      date: "2022-5-25",
+      section: "下午",
+      doctor: "cyh,wlx",
     },
     {
-      date: "2022-5-28",
-      department: "普通外科4",
+      date: "2022-5-25",
+      section: "下午",
+      doctor: "cyh,wlx",
     }
   ]
 
