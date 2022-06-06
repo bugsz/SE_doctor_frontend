@@ -43,7 +43,8 @@ const description = (currentDoctor) => {
     //    <Card bordered={false}>
             <Descriptions className={styles.headerList} column={2}>
             <Descriptions.Item label="日期">{currentDoctor.date}</Descriptions.Item>
-            <Descriptions.Item label="科室">{currentDoctor.department}</Descriptions.Item>
+            <Descriptions.Item label="时间段">{currentDoctor.section}</Descriptions.Item>
+            <Descriptions.Item label="值班医生">{currentDoctor.doctor}</Descriptions.Item>
             </Descriptions>
     //    </Card>
 

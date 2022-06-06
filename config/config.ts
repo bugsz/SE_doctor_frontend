@@ -367,7 +367,7 @@ export default defineConfig({
       name: "排班管理",
       icon: "table",
       path: '/TimeTable_Change',
-      component: "./TimeTable_Change/ManageNew",
+      component: "./TimeTable_Change/Department",
       access: "canAdmin"
     },
 
@@ -401,10 +401,10 @@ export default defineConfig({
     },
 
     {
-      path: "/TimeTable_Change/details/:date",
+      path: "/TimeTable_Change/manage",
       name: "排班详情",
       hideInMenu: true,
-      component: "./TimeTable_Change/Details",
+      component: "./TimeTable_Change/ManageNew",
     },
 
     {

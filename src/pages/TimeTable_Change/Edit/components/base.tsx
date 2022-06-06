@@ -116,17 +116,6 @@ const BaseView: React.FC<BaseViewProps> = ( {id, children} ) => {
               initialValues={{ ...currentUser }}
               hideRequiredMark
             >
-              <ProFormText
-                width="md"
-                name="department"
-                label="科室"
-                rules={[
-                  {
-                    required: true,
-                    message: '请输入排班科室!',
-                  },
-                ]}
-              />
 
             <ProFormText
                 width="md"
@@ -139,6 +128,41 @@ const BaseView: React.FC<BaseViewProps> = ( {id, children} ) => {
                   },
                 ]}
               />
+
+               <ProFormSelect
+                width="xs"
+                options={[
+                  {
+                    value: '上午',
+                    label: '上午',
+                  },
+                  {
+                    value: "下午",
+                    label: "下午",
+                  },
+                ]}
+                name="section"
+                label="时间段"
+
+                rules={[
+                  {
+                    required: true,
+                    message: '请选择排班时间段!',
+                  }, 
+                ]}
+              />
+
+                <ProFormText
+                width="md"
+                name="doctor"
+                label="医生"
+                rules={[
+                  {
+                    required: true,
+                    message: '请输入值班医生!',
+                  },
+                ]}
+              />      
 
             </ProForm>
           </div>
