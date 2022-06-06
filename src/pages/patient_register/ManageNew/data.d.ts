@@ -1,5 +1,8 @@
 export type patientItem = {
-  patient_id: string
-  patient_name: string;
-  register_time: string;
+  // patient_id: string
+  // patient_name: string;
+  // register_time: string;
+  user_id: string;
+  name: string;
+  time: string;
 };

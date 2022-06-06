@@ -8,6 +8,7 @@ export async function GetDoctorId(params) {
 }
 
 export async function GetPatientRegisterList(params) {
+  console.log(params)
   return request("/api/register/get", {
     method: "GET",
     params: {...params},

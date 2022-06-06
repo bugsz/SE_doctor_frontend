@@ -8,7 +8,7 @@ import type { patientItem } from './data.d';
 import { GetDoctorId, GetPatientRegisterList } from './service';
 
 function getPatientInfoUrl(record: patientItem) {
-  return `/patient_register/diagnosis/${record.patient_id}`;
+  return `/patient_register/diagnosis/${record.user_id}`;
 }
 
 const columns: ProColumns<patientItem>[] = [
@@ -19,7 +19,7 @@ const columns: ProColumns<patientItem>[] = [
   },
   {
     title: '姓名',
-    dataIndex: 'patient_name',
+    dataIndex: 'user_id',
     copyable: true,
     ellipsis: true,
     // tip: '标题过长会自动收缩',
@@ -34,7 +34,7 @@ const columns: ProColumns<patientItem>[] = [
   },
   {
     title: '预约时间段',
-    dataIndex: 'register_time',
+    dataIndex: 'time',
     // valueType: 'string',
     // hideInTable: true,
     hideInSearch: true,
@@ -54,7 +54,7 @@ const columns: ProColumns<patientItem>[] = [
 ];
 
 let curr_date = '';
-const tmp_depart = 'abcd';
+let curr_doctor_id = '';
 
 function onChange(date, dateString) {
   curr_date = dateString.replace(/[-_]/g, "");
@@ -64,9 +64,10 @@ function onChange(date, dateString) {
 const ManageNew = () => {
   const actionRef = useRef<ActionType>();
   const response_me_id = GetDoctorId({}).then(res => {
+    curr_doctor_id = res.data.id;
+    console.log(curr_doctor_id)
     return res.data.id;
   })
-  console.log(response_me_id);
 
   return (
     <div>
@@ -86,21 +87,32 @@ const ManageNew = () => {
         //   }>('/api/register/get', {
         //     params,
         //   });
-        params = { params }
         request= {
-          async (params = {date: curr_date, doctor_id: response_me_id}, sort, filter) => {
-            console.log(params)
-            console.log()
-            const response = await GetPatientRegisterList(params).then(res => {
-              console.log(params)
+          async (params = {date:curr_date, doctor_id: curr_doctor_id}, sort, filter) => {
+            //let data = Object.assign(params, curr_date, response_me_id)
+            console.log(curr_date)
+            console.log(curr_doctor_id)
+            const response = await GetPatientRegisterList({ ...params, time: curr_date, doctor_id: curr_doctor_id}).then(res => {
+              console.log(res)
+              // let item:patientItem[]
+              // for(var i=0; i<res.data.length; i++){
+              //   let tmp: patientItem = {patient_id:"0", patient_name:"0", register_time:"0"};
+              //   tmp.patient_id = res.data.user_id[i];
+              //   tmp.patient_name = res.data.name[i];
+              //   tmp.register_time = res.data.time[i];
+              //   console.log(tmp)
+              //   item.push(tmp)
+              // }
+              // console.log(item)
               console.log(res.data)
-              let item = []
-              for(var i=0; i<res.data.length; i++){
-                item[i].patient_id = res.data.patient_id;
-                item[i].patient_name = res.data.name;
-                item[i].register_time = res.data.time_slice;
+              const result = {
+                data: res.data,
+                total: res.data.return_count,
+                success: res.success,
+                pageSize: res.pageSize,
+                current: res.current,
               }
-              return item;
+              return result;
             })
             return Promise.resolve(response)
           }
@@ -116,7 +128,7 @@ const ManageNew = () => {
             console.log('value: ', value);
           },
         }}
-        rowKey="patient_id"
+        rowKey="user_id"
         search={false}
         pagination={{
           pageSize: 5,
