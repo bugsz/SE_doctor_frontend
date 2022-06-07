@@ -12,7 +12,8 @@ import ProForm, {
 import { useRequest, useModel } from 'umi';
 
 import styles from './BaseView.less';
-import { AddDoctorInfo, ListDoctorDetails } from '../service';
+import { AddDoctorInfo, ListDoctorDetails } from '../../service';
+import { DoctorItem } from '../../data';
 
 const validatorPhone = (rule: any, value: string[], callback: (message?: string) => void) => {
   if (!value[0]) {
@@ -52,19 +53,20 @@ const BaseView: React.FC<BaseViewProps> = ( {id, children} ) => {
     run: refreshCurrent,
     loading,
   } = useRequest(() => {
-    return ListDoctorDetails(id);
+    return ListDoctorDetails(id!);
   });
 
 
   loading = false;
   currentUser = {
     doctor_id: "",
-    doctor_name: "",
-    department: "",
-    position: "",
+    name: "",
     gender: "",
-    photo: "",
     age: 0,
+    dept_id: "",
+    position: "",
+
+    password: "",
   }
 
   const getAvatarURL = () => {
@@ -78,9 +80,9 @@ const BaseView: React.FC<BaseViewProps> = ( {id, children} ) => {
     return '';
   };
 
-  const handleFinish = async (values) => {
+  const handleFinish = async (values: DoctorItem) => {
     try {
-      const msg = await AddDoctorInfo(id, values, {});
+      const msg = await AddDoctorInfo(values);
       console.log(msg)
       if (msg.status === 100) {
         notification.success({

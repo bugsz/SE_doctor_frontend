@@ -1,28 +1,26 @@
+import { PlusOutlined } from '@ant-design/icons';
+import type { ActionType, ProColumns } from '@ant-design/pro-table';
+import ProTable from '@ant-design/pro-table';
+import { Button, notification } from 'antd';
 import React, { useRef } from 'react';
-import { PlusOutlined, EllipsisOutlined } from '@ant-design/icons';
-import { Button, Tag, Space, Menu, Dropdown, notification } from 'antd';
-import type { ProColumns, ActionType } from '@ant-design/pro-table';
-import ProTable, { TableDropdown } from '@ant-design/pro-table';
-import request from 'umi-request';
-import { doctorItem } from './data.js';
-import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { history } from 'umi';
-import { DeleteDoctor, ListDoctor } from './service';
+import { DoctorItem } from '../data';
+import { DeleteDoctor, ListDoctor } from '../service';
 
-function getInfoUrl(record: doctorItem) {
+function getInfoUrl(record: DoctorItem) {
   return `/doctor/details/${record.doctor_id}`;
 }
 
-function getDeleteUrl(record: doctorItem) {
+function getDeleteUrl(record: DoctorItem) {
   return `${record.doctor_id}/delete`;
 }
 
-function getEditUrl(record: doctorItem) {
+function getEditUrl(record: DoctorItem) {
   return `/doctor/edit/${record.doctor_id}`;
 }
 
-
-const deleteDoctor = async (id) => {
+const deleteDoctor = async (id: string) => {
   try {
     const msg = await DeleteDoctor({ doctor_id: id });
     if (msg.status === 100) {
@@ -31,10 +29,9 @@ const deleteDoctor = async (id) => {
         description: '删除成功',
         message: '删除成功',
       });
-      history.push("/doctors");
+      history.push('/doctors');
       // window.history.back();
       // window.location.reload();
-
     } else {
       notification.error({
         duration: 4,
@@ -50,9 +47,9 @@ const deleteDoctor = async (id) => {
       description: '请求失败，请稍后重新尝试',
     });
   }
-}
+};
 
-const columns: ProColumns<doctorItem>[] = [
+const columns: ProColumns<DoctorItem>[] = [
   {
     dataIndex: 'index',
     valueType: 'indexBorder',
@@ -96,28 +93,35 @@ const columns: ProColumns<doctorItem>[] = [
     dataIndex: 'position',
     // valueType: 'string',
     // hideInTable: true,
-    hideInSearch: true
+    hideInSearch: true,
   },
   {
     title: '操作',
     valueType: 'option',
     key: 'option',
     render: (text, record, _, action) => [
-      <Link className="to" to={{pathname: getInfoUrl(record)}} key="view">查看</Link>,
-      <Link className="to" to={{pathname: getEditUrl(record)}} key="view">编辑</Link>,
-      
-      <a href={getDeleteUrl(record)} target="_blank" rel="noopener noreferrer" key="view" onClick={
-        (e) => {
+      <Link className="to" to={{ pathname: getInfoUrl(record) }} key="view">
+        查看
+      </Link>,
+      <Link className="to" to={{ pathname: getEditUrl(record) }} key="view">
+        编辑
+      </Link>,
+
+      <a
+        href={getDeleteUrl(record)}
+        target="_blank"
+        rel="noopener noreferrer"
+        key="view"
+        onClick={(e) => {
           e.preventDefault();
           deleteDoctor(record.doctor_id);
-        }
-      }>
-      删除
+        }}
+      >
+        删除
       </a>,
     ],
   },
 ];
-
 
 // const menu = (
 //   <Menu>
@@ -130,28 +134,28 @@ const columns: ProColumns<doctorItem>[] = [
 const Manage = () => {
   const actionRef = useRef<ActionType>();
   return (
-    <ProTable<doctorItem>
+    <ProTable<DoctorItem>
       columns={columns}
       actionRef={actionRef}
       cardBordered
+      request={async (params = {}, sort, filter) => {
+        console.log(params);
 
-      request= {
-        async (params = {}, sort, filter) => {
-          const response = await ListDoctor(params).then(res => {
-            // console.log(res.data.dataSource)
-            console.log(res.data)
-            const result = {
-              data: res.data.doctor_list,
-              total: res.data.return_count,
-              success: res.success,
-              pageSize: res.pageSize,
-              current: res.current,
-            }
-            return result
-          })
-          return Promise.resolve(response)
-        }
-      }
+        // FIXME: pass param
+        const response = await ListDoctor(params).then((res) => {
+          // console.log(res.data.dataSource)
+          console.log(res.data);
+          const result = {
+            data: res.data.doctor_list,
+            total: res.data.return_count,
+            success: res.success,
+            pageSize: res.pageSize,
+            current: res.current,
+          };
+          return result;
+        });
+        return Promise.resolve(response);
+      }}
       editable={{
         type: 'multiple',
       }}
@@ -166,18 +170,18 @@ const Manage = () => {
       search={{
         labelWidth: 'auto',
       }}
-    //   form={{
-    //     // 由于配置了 transform，提交的参与与定义的不同这里需要转化一下
-    //     syncToUrl: (values, type) => {
-    //       if (type === 'get') {
-    //         return {
-    //           ...values,
-    //           created_at: [values.startTime, values.endTime],
-    //         };
-    //       }
-    //       return values;
-    //     },
-    //   }}
+      //   form={{
+      //     // 由于配置了 transform，提交的参与与定义的不同这里需要转化一下
+      //     syncToUrl: (values, type) => {
+      //       if (type === 'get') {
+      //         return {
+      //           ...values,
+      //           created_at: [values.startTime, values.endTime],
+      //         };
+      //       }
+      //       return values;
+      //     },
+      //   }}
       pagination={{
         pageSize: 5,
         onChange: (page) => console.log(page),
@@ -185,7 +189,14 @@ const Manage = () => {
       dateFormatter="string"
       headerTitle="医生列表"
       toolBarRender={() => [
-        <Button key="button" icon={<PlusOutlined />} type="primary" onClick={() => {history.push("/doctor/new")}}>
+        <Button
+          key="button"
+          icon={<PlusOutlined />}
+          type="primary"
+          onClick={() => {
+            history.push('/doctor/new');
+          }}
+        >
           新建
         </Button>,
         // <Dropdown key="menu" overlay={menu}>
