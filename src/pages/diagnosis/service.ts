@@ -3,9 +3,10 @@ import type { diagnosisType, patientInfoType } from './data';
 
 export async function queryPatientInfo(params: {
   id?: string;
-}): Promise<{ data: patientInfoType }> {
+})/*: Promise<{ data: patientInfoType }> */{
+  console.log({user_id: params.id})
   return request('/api/doctor/patient_info/get', {
-    params: params,
+    params: {user_id: params.id},
   });
 }
 
