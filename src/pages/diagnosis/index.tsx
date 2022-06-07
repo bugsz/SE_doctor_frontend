@@ -4,15 +4,26 @@ import { Card, Descriptions, Divider } from 'antd';
 import type { FC } from 'react';
 import { useParams, useRequest } from 'umi';
 import type { patientInfoType } from './data';
-import { deletePatient, queryPatientInfo, uploadDiagnosis } from './service';
+import { deletePatient, queryPatientInfo, uploadDiagnosis, GetDoctorId } from './service';
 import styles from './style.less';
 import { useState } from 'react';
+import { useHistory } from 'react-router-dom'
 
 interface IParam {
   id?: string;
 }
 
+let curr_doctor_id = ''
+let curr_doctor_name = ''
+
 const Diagnosis: FC = (props) => {
+  GetDoctorId({}).then(res => {
+    //console.log(res.data)
+    curr_doctor_id = res.data.id;
+    curr_doctor_name = res.data.name;
+    console.log(curr_doctor_id)
+    console.log(curr_doctor_name)
+  })
   // const { loading: patientInfoLoading, data: patientInfo } = useRequest({
   //   url: '/api/doctor/patient_info/get',
   //   method: 'GET',
@@ -45,6 +56,7 @@ const Diagnosis: FC = (props) => {
   // console.log(useParams<IParam>());
   console.log(patientInfoLoading);
   console.log(patientInfo);
+  console.log()
 
   const renderPatientInfo = (item: patientInfoType) => {
     //console.log(item)
@@ -54,7 +66,7 @@ const Diagnosis: FC = (props) => {
           <Descriptions title="患者信息">
             <Descriptions.Item label="姓名">{item.name}</Descriptions.Item>
             <Descriptions.Item label="性别">{item.gender}</Descriptions.Item>
-            <Descriptions.Item label="年龄">{item.age}</Descriptions.Item>
+            <Descriptions.Item label="年龄">{18}</Descriptions.Item>
             <Descriptions.Item label="电话">{item.phone}</Descriptions.Item>
           </Descriptions>
         ) : (null) }
@@ -84,13 +96,18 @@ const Diagnosis: FC = (props) => {
       <Card title="诊断意见" className={styles.activeCard}>
         <ProForm
           onFinish={async (values) => {
-            deletePatient({ id: patientInfo.id });
+            deletePatient({ user_id: patientInfo.id });
             uploadDiagnosis({
               patient_id: patientInfo.id,
               patient_name: patientInfo.name,
-              date: new Date().toDateString(),
-              content: values.diagnosis,
+              depart_id: patientInfo.department,
+              doctor_id: curr_doctor_id,
+              doctor_name: curr_doctor_name,
+              timestamp: new Date(),
+              diagnosis_message: values.diagnosis,
+              medicine_message: '',
             });
+            window.history.back(-1)
           }}
         >
           <ProFormTextArea

@@ -23,12 +23,22 @@ export async function queryPatientInfo(id?: string)/*: Promise<{ data: patientIn
 
 export async function deletePatient(params: { id?: string }) {
   return request('/api/doctor/call', {
+    method: "POST",
     params: params,
   });
 }
 
 export async function uploadDiagnosis(diagnosis: diagnosisType) {
+  console.log(diagnosis)
   return request('/api/doctor/diagnostic_msg/upload', {
+    method: "POST",
     params: diagnosis,
   });
+}
+
+export async function GetDoctorId(params) {
+  return request("/api/me", {
+    method: "GET",
+    params: { ...params },
+  })
 }

@@ -44,10 +44,10 @@ export type patientInfoType = {
 export type diagnosisType = {
   patient_id: string; //患者医保电子卡凭证卡号
   patient_name: string; //患者姓名
-  department?: string; //诊断科室
+  depart_id?: string; //诊断科室
   doctor_id?: string; //给患者诊断的医生ID
   doctor_name?: string; //给患者诊断的医生姓名
-  date: string; //诊断日期
-  section?: SectionType; //诊断时间段
-  content: string; //诊断信息（纯文本）
+  timestamp?: Date; //诊断日期
+  diagnosis_message: string; //诊断信息（纯文本）
+  medicine_message: string;
 };
