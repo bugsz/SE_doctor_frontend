@@ -88,11 +88,11 @@ const ManageNew = () => {
         //     params,
         //   });
         request= {
-          async (params = {date:curr_date, doctor_id: curr_doctor_id}, sort, filter) => {
+          async (params = {date_curr: curr_date, doctor_id: curr_doctor_id}, sort, filter) => {
             //let data = Object.assign(params, curr_date, response_me_id)
             console.log(curr_date)
             console.log(curr_doctor_id)
-            const response = await GetPatientRegisterList({ ...params, time: curr_date, doctor_id: curr_doctor_id}).then(res => {
+            const response = await GetPatientRegisterList({ date_curr: curr_date, doctor_id: curr_doctor_id}).then(res => {
               console.log(res)
               // let item:patientItem[]
               // for(var i=0; i<res.data.length; i++){
