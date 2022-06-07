@@ -1,9 +1,9 @@
 import type { ActionType, ProColumns } from '@ant-design/pro-table';
 import ProTable from '@ant-design/pro-table';
 import { Button, DatePicker } from 'antd';
-import React, { useEffect, useRef, useState } from 'react';
+import { Moment } from 'moment';
+import React, { FC, useRef } from 'react';
 import { Link } from 'react-router-dom';
-import request from 'umi-request';
 import type { patientItem } from './data.d';
 import { GetDoctorId, GetPatientRegisterList } from './service';
 
@@ -56,22 +56,23 @@ const columns: ProColumns<patientItem>[] = [
 let curr_date = '';
 let curr_doctor_id = '';
 
-function onChange(date, dateString) {
-  curr_date = dateString.replace(/[-_]/g, "");
-  console.log(curr_date);
-}
-
-const ManageNew = () => {
+const ManageNew: FC = () => {
   const actionRef = useRef<ActionType>();
-  const response_me_id = GetDoctorId({}).then(res => {
+  const response_me_id = GetDoctorId({}).then((res) => {
     curr_doctor_id = res.data.id;
-    console.log(curr_doctor_id)
+    console.log(curr_doctor_id);
     return res.data.id;
-  })
+  });
+
+  const onChange = (date: Moment | null, dateString: string) => {
+    curr_date = dateString.replace(/[-_]/g, '');
+    actionRef.current?.reload();
+    console.log(curr_date);
+  };
 
   return (
     <div>
-      <DatePicker onChange={onChange} picker="day" />,
+      <DatePicker onChange={onChange} picker="date" />,
       <ProTable<patientItem>
         columns={columns}
         actionRef={actionRef}
@@ -87,37 +88,41 @@ const ManageNew = () => {
         //   }>('/api/register/get', {
         //     params,
         //   });
-        request= {
-          async (params = {date_curr: curr_date, doctor_id: curr_doctor_id}, sort, filter) => {
-            //let data = Object.assign(params, curr_date, response_me_id)
-            console.log(curr_date)
-            console.log(curr_doctor_id)
-            const response = await GetPatientRegisterList({ date_curr: curr_date, doctor_id: curr_doctor_id}).then(res => {
-              console.log(res)
-              // let item:patientItem[]
-              // for(var i=0; i<res.data.length; i++){
-              //   let tmp: patientItem = {patient_id:"0", patient_name:"0", register_time:"0"};
-              //   tmp.patient_id = res.data.user_id[i];
-              //   tmp.patient_name = res.data.name[i];
-              //   tmp.register_time = res.data.time[i];
-              //   console.log(tmp)
-              //   item.push(tmp)
-              // }
-              // console.log(item)
-              console.log(res.data)
-              const result = {
-                data: res.data,
-                total: res.data.return_count,
-                success: res.success,
-                pageSize: res.pageSize,
-                current: res.current,
-              }
-              return result;
-            })
-            return Promise.resolve(response)
-          }
-        }
-
+        request={async (
+          params = { date_curr: curr_date, doctor_id: curr_doctor_id },
+          sort,
+          filter,
+        ) => {
+          //let data = Object.assign(params, curr_date, response_me_id)
+          console.log(curr_date);
+          console.log(curr_doctor_id);
+          const response = await GetPatientRegisterList({
+            date_curr: curr_date,
+            doctor_id: curr_doctor_id,
+          }).then((res) => {
+            console.log(res);
+            // let item:patientItem[]
+            // for(var i=0; i<res.data.length; i++){
+            //   let tmp: patientItem = {patient_id:"0", patient_name:"0", register_time:"0"};
+            //   tmp.patient_id = res.data.user_id[i];
+            //   tmp.patient_name = res.data.name[i];
+            //   tmp.register_time = res.data.time[i];
+            //   console.log(tmp)
+            //   item.push(tmp)
+            // }
+            // console.log(item)
+            console.log(res.data);
+            const result = {
+              data: res.data,
+              total: res.data.return_count,
+              success: res.success,
+              pageSize: res.pageSize,
+              current: res.current,
+            };
+            return result;
+          });
+          return Promise.resolve(response);
+        }}
         editable={{
           type: 'single',
         }}
