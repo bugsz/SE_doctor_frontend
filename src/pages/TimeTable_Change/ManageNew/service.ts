@@ -1,25 +1,19 @@
 import { request } from 'umi';
 
-export async function ListSchedule(params) {
+export async function ListSchedule(params: { dept_id: string }) {
   console.log(params);
-  return request("/api/admin/schedule/get", {
-    method: "GET",
+  return request('/api/admin/schedule/get', {
+    method: 'GET',
     params: { ...params },
-  })
+  });
 }
-// export async function ListSchedule(department, data, options) {
-//   return request("/api/admin/schedule/get", {
-//     method: "GET",
-//     params: { department: department },
-//   })
-// }
 
-export async function DeleteSchedule(params) {
-  return request("/api/TimeTable_Change/deleteSchedule", {
-    method: "DELETE",
-    params: {...params},
-  }
-  );
+/// unused
+export async function DeleteSchedule(params: { id: string }) {
+  return request('/api/TimeTable_Change/deleteSchedule', {
+    method: 'DELETE',
+    params: { ...params },
+  });
 }
 
 // export async function DeleteUser(params) {

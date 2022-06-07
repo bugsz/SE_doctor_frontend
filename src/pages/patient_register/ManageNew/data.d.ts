@@ -6,3 +6,8 @@ export type patientItem = {
   name: string;
   time: string;
 };
+
+export type registerReqType = {
+  date_curr: string;
+  doctor_id: string;
+}

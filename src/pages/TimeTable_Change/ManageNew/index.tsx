@@ -1,7 +1,7 @@
 import { ArrowLeftOutlined, PlusOutlined } from '@ant-design/icons';
 import type { ActionType, ProColumns } from '@ant-design/pro-table';
 import ProTable from '@ant-design/pro-table';
-import { Button, Menu, notification } from 'antd';
+import { Button, notification } from 'antd';
 import moment from 'moment';
 import React, { FC, useRef } from 'react';
 import { Link } from 'react-router-dom';
@@ -21,7 +21,7 @@ function getEditUrl(record: scheduleItem) {
   return `/TimeTable_Change/edit/${record.date}`;
 }
 
-const deleteSchedule = async (id) => {
+const deleteSchedule = async (id: string) => {
   try {
     const msg = await DeleteSchedule({ id });
     if (msg.status === 'success') {
@@ -121,14 +121,6 @@ interface IParam {
 }
 
 let department: string;
-
-const menu = (
-  <Menu>
-    <Menu.Item key="1">1st item</Menu.Item>
-    <Menu.Item key="2">2nd item</Menu.Item>
-    <Menu.Item key="3">3rd item</Menu.Item>
-  </Menu>
-);
 
 const ManageNew: FC = () => {
   const actionRef = useRef<ActionType>();

@@ -22,11 +22,11 @@ export type Member = {
   id: string;
 };
 
-export enum SectionType {
-  Morning = 1,
-  Afternoon = 2,
-  Evening = 3,
-}
+// export enum SectionType {
+//   Morning = 1,
+//   Afternoon = 2,
+//   Evening = 3,
+// }
 
 export type patientInfoType = {
   id: string;
@@ -35,7 +35,7 @@ export type patientInfoType = {
   age: Number;
   phone: string;
   appoint_date: string;
-  section: SectionType;
+  section: string;
   department: string;
   photo?: string;
   history?: string[];

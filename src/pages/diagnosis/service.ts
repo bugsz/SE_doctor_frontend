@@ -12,7 +12,7 @@ import type { diagnosisType, patientInfoType } from './data';
 //   return res
 // }
 
-export async function queryPatientInfo(id?: string)/*: Promise<{ data: patientInfoType }> */{
+export async function queryPatientInfo(id?: string): Promise<patientInfoType> {
   console.log({user_id: id})
   const res = await request('/api/doctor/patient_info/get', {
     params: {user_id: id},
@@ -21,7 +21,7 @@ export async function queryPatientInfo(id?: string)/*: Promise<{ data: patientIn
   return res
 }
 
-export async function deletePatient(params: { id?: string }) {
+export async function deletePatient(params: { user_id: string }) {
   return request('/api/doctor/call', {
     method: "POST",
     params: params,
@@ -36,7 +36,7 @@ export async function uploadDiagnosis(diagnosis: diagnosisType) {
   });
 }
 
-export async function GetDoctorId(params) {
+export async function GetDoctorId(params: {}) {
   return request("/api/me", {
     method: "GET",
     params: { ...params },

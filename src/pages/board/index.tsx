@@ -1,12 +1,11 @@
-import { currentUser } from '@/services/ant-design-pro/api';
 import { PageContainer } from '@ant-design/pro-layout';
 import { Avatar, Card, Col, List, Row, Skeleton, Statistic } from 'antd';
 import moment from 'moment';
 import type { FC } from 'react';
 import { Link, useModel, useRequest } from 'umi';
 import EditableLinkGroup from './components/EditableLinkGroup';
-import type { AnnounceType, CurrentUser } from './data';
-import { queryAnnounce} from './service';
+import type { AnnounceType } from './data';
+import { queryAnnounce } from './service';
 import styles from './style.less';
 
 const links = [
@@ -20,9 +19,7 @@ const links = [
   },
 ];
 
-
-const PageHeaderContent = ({ currentUser }) => {
-
+const PageHeaderContent: FC<{ currentUser: API.CurrentUser }> = ({ currentUser }) => {
   const loading = currentUser && Object.keys(currentUser).length;
   if (!loading) {
     return <Skeleton avatar paragraph={{ rows: 1 }} active />;
@@ -45,33 +42,34 @@ const PageHeaderContent = ({ currentUser }) => {
   );
 };
 
-const ExtraContent = ( {currentUser} ) => {
-    const loading = currentUser && Object.keys(currentUser).length;
+const ExtraContent: FC<{ currentUser: API.CurrentUser }> = ({ currentUser }) => {
+  const loading = currentUser && Object.keys(currentUser).length;
 
-    if (!loading) {
-      return <Skeleton avatar paragraph={{ rows: 1 }} active />;
-    }
+  if (!loading) {
+    return <Skeleton avatar paragraph={{ rows: 1 }} active />;
+  }
 
-
-
-    return (
-      <div className={styles.extraContent}>
-        <div className={styles.statItem}>
-          <Statistic title={moment().format('yyyy年MM月D日')} value={moment().format('dddd')} />
-        </div>
-        <div className={styles.statItem}>
-          <Statistic title="科室" value={currentUser.department} />
-        </div>
+  return (
+    <div className={styles.extraContent}>
+      <div className={styles.statItem}>
+        <Statistic title={moment().format('yyyy年MM月D日')} value={moment().format('dddd')} />
       </div>
-    )
+      <div className={styles.statItem}>
+        <Statistic title="科室" value={currentUser.department} />
+      </div>
+    </div>
+  );
 };
 
 const Board: FC = () => {
   const { loading: announceLoading, data: data } = useRequest(queryAnnounce);
 
-  const { initialState, setInitialState } = useModel('@@initialState');
-  const { currentUser } = initialState;
+  const { currentUser: currentUser } = useModel('@@initialState', (ret) => ret.initialState)!;
 
+  if (currentUser === undefined) {
+    throw 'current user undefined?';
+  }
+  console.log(currentUser);
 
   const announce = data?.announce;
 
@@ -104,15 +102,8 @@ const Board: FC = () => {
 
   return (
     <PageContainer
-      content={
-        <PageHeaderContent
-          currentUser={currentUser}/>
-        }
-
-      extraContent={
-        <ExtraContent 
-          currentUser={currentUser} />
-        }
+      content={<PageHeaderContent currentUser={currentUser} />}
+      extraContent={<ExtraContent currentUser={currentUser} />}
     >
       <Row gutter={24}>
         <Col xl={16} lg={24} md={24} sm={24} xs={24}>

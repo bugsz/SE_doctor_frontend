@@ -2,61 +2,53 @@ import ProForm, { ProFormTextArea } from '@ant-design/pro-form';
 import { PageContainer } from '@ant-design/pro-layout';
 import { Card, Descriptions, Divider } from 'antd';
 import type { FC } from 'react';
+import { useState } from 'react';
 import { useParams, useRequest } from 'umi';
 import type { patientInfoType } from './data';
-import { deletePatient, queryPatientInfo, uploadDiagnosis, GetDoctorId } from './service';
+import { deletePatient, GetDoctorId, queryPatientInfo, uploadDiagnosis } from './service';
 import styles from './style.less';
-import { useState } from 'react';
-import { useHistory } from 'react-router-dom'
 
 interface IParam {
-  id?: string;
+  id: string;
 }
 
-let curr_doctor_id = ''
-let curr_doctor_name = ''
+let curr_doctor_id = '';
+let curr_doctor_name = '';
+
+const default_patient: patientInfoType = {
+  id: '???',
+  name: '???',
+  gender: '???',
+  age: 114514,
+  phone: '???',
+  appoint_date: '???',
+  section: '???',
+  department: '???',
+};
 
 const Diagnosis: FC = (props) => {
-  GetDoctorId({}).then(res => {
+  GetDoctorId({}).then((res) => {
     //console.log(res.data)
     curr_doctor_id = res.data.id;
     curr_doctor_name = res.data.name;
-    console.log(curr_doctor_id)
-    console.log(curr_doctor_name)
-  })
-  // const { loading: patientInfoLoading, data: patientInfo } = useRequest({
-  //   url: '/api/doctor/patient_info/get',
-  //   method: 'GET',
-  //   params: useParams<IParam>(),
-  // });
-  const [patientInfo, setPatientInfo] = useState<patientInfoType>();
+    console.log(curr_doctor_id);
+    console.log(curr_doctor_name);
+  });
 
-  const id = props.match.params.id;
-  const get = async () => {
-    console.log(id)
+  const [patientInfo, setPatientInfo] = useState<patientInfoType>(default_patient);
+
+  const id = useParams<IParam>().id;
+  const { loading: patientInfoLoading } = useRequest(async () => {
+    console.log(id);
     await queryPatientInfo(id).then((res) => {
-      console.log(res)
-      setPatientInfo(res)
-    })
-  }
+      console.log(res);
+      setPatientInfo(res);
+    });
+  });
 
-  const { loading: patientInfoLoading} = useRequest(
-    get
-  //   queryPatientInfo, {
-  //   defaultParams: [useParams<IParam>()],
-  //   onSuccess: (res) => {
-  //     console.log(res);
-  //     console.log("Success")
-  //   }
-  // }
-  );
-
-  // const patientInfo = _patientInfo!;
-
-  // console.log(useParams<IParam>());
   console.log(patientInfoLoading);
   console.log(patientInfo);
-  console.log()
+  console.log();
 
   const renderPatientInfo = (item: patientInfoType) => {
     //console.log(item)
@@ -69,7 +61,7 @@ const Diagnosis: FC = (props) => {
             <Descriptions.Item label="年龄">{18}</Descriptions.Item>
             <Descriptions.Item label="电话">{item.phone}</Descriptions.Item>
           </Descriptions>
-        ) : (null) }
+        ) : null}
         {!patientInfoLoading ? (
           <Card type="inner" title="患者病史">
             {item.history?.map((str, index) => {
@@ -85,14 +77,14 @@ const Diagnosis: FC = (props) => {
               );
             })}
           </Card>
-        ) : (null)}
+        ) : null}
       </Card>
     );
-  }
+  };
 
   return (
     <PageContainer>
-      {patientInfoLoading ? <></> : renderPatientInfo(patientInfo)}
+      {patientInfoLoading ? <></> : renderPatientInfo(patientInfo!)}
       <Card title="诊断意见" className={styles.activeCard}>
         <ProForm
           onFinish={async (values) => {
@@ -107,7 +99,7 @@ const Diagnosis: FC = (props) => {
               diagnosis_message: values.diagnosis,
               medicine_message: '',
             });
-            window.history.back(-1)
+            window.history.back();
           }}
         >
           <ProFormTextArea
