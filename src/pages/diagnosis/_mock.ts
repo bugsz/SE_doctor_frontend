@@ -36,5 +36,5 @@ const getPatientInfo = (_: Request, res: Response) => {
 };
 
 export default {
-  'GET  /api/doctor/patient_info/get': getPatientInfo,
+  // 'GET  /api/doctor/patient_info/get': getPatientInfo,
 };

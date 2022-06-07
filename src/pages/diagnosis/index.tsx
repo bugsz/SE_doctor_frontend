@@ -28,34 +28,37 @@ const Diagnosis: FC = () => {
   console.log(patientInfoLoading);
   console.log(patientInfo);
 
-  const renderPatientInfo = (item: patientInfoType) => (
-    <Card loading={patientInfoLoading}>
-      {!patientInfoLoading ? (
-        <Descriptions title="患者信息">
-          <Descriptions.Item label="姓名">{item.name}</Descriptions.Item>
-          <Descriptions.Item label="性别">{item.gender}</Descriptions.Item>
-          <Descriptions.Item label="年龄">{item.age}</Descriptions.Item>
-          <Descriptions.Item label="电话">{item.phone}</Descriptions.Item>
-        </Descriptions>
-      ) : null}
-      {!patientInfoLoading ? (
-        <Card type="inner" title="患者病史">
-          {item.history?.map((str, index) => {
-            const title_str = `病史${index + 1}`;
-            // TODO: 病史可以用更复杂的对象数组来表示，现在是单纯字符串数组
-            return (
-              <div>
-                <Descriptions style={{ marginBottom: 16 }} title={title_str} key={index}>
-                  <Descriptions.Item label="描述">{str}</Descriptions.Item>
-                </Descriptions>
-                <Divider style={{ margin: '16px 0' }} />
-              </div>
-            );
-          })}
-        </Card>
-      ) : null}
-    </Card>
-  );
+  const renderPatientInfo = (item: patientInfoType) => {
+    //console.log(item)
+    return (
+      <Card loading={patientInfoLoading}>
+        {!patientInfoLoading ? (
+          <Descriptions title="患者信息">
+            <Descriptions.Item label="姓名">{item.name}</Descriptions.Item>
+            <Descriptions.Item label="性别">{item.gender}</Descriptions.Item>
+            <Descriptions.Item label="年龄">{item.age}</Descriptions.Item>
+            <Descriptions.Item label="电话">{item.phone}</Descriptions.Item>
+          </Descriptions>
+        ) : null}
+        {!patientInfoLoading ? (
+          <Card type="inner" title="患者病史">
+            {item.history?.map((str, index) => {
+              const title_str = `病史${index + 1}`;
+              // TODO: 病史可以用更复杂的对象数组来表示，现在是单纯字符串数组
+              return (
+                <div>
+                  <Descriptions style={{ marginBottom: 16 }} title={title_str} key={index}>
+                    <Descriptions.Item label="描述">{str}</Descriptions.Item>
+                  </Descriptions>
+                  <Divider style={{ margin: '16px 0' }} />
+                </div>
+              );
+            })}
+          </Card>
+        ) : null}
+      </Card>
+    );
+  }
 
   return (
     <PageContainer>
