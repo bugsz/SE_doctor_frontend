@@ -9,11 +9,11 @@ import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
 import { history } from 'umi';
 // import { DeleteDoctor } from './service';
 
-function getInfoUrl(record: doctorItem) {
-  return `/TimeTable_Change/manage`;
+function getInfoUrl(record: departmentItem) {
+  return `/TimeTable_Change/manage/${record.department}`;
 }
 
-const columns: ProColumns<doctorItem>[] = [
+const columns: ProColumns<departmentItem>[] = [
   {
     dataIndex: 'index',
     valueType: 'indexBorder',
@@ -66,16 +66,13 @@ const menu = (
 const Department = () => {
   const actionRef = useRef<ActionType>();
   return (
-    <ProTable<doctorItem>
+    <ProTable<departmentItem>
       columns={columns}
       actionRef={actionRef}
       cardBordered
       request={async (params = {}, sort, filter) => {
-        // console.log(sort, filter);
-        // console.log(params);
-        // console.log(params.name);
         return request<{
-          data: doctorItem[];
+          data: departmentItem[];
         }>('/api/TimeTable_Change/getDepartment', {
           params,
         });

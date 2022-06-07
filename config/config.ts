@@ -401,7 +401,7 @@ export default defineConfig({
     },
 
     {
-      path: "/TimeTable_Change/manage",
+      path: "/TimeTable_Change/manage/:department",
       name: "排班详情",
       hideInMenu: true,
       component: "./TimeTable_Change/ManageNew",

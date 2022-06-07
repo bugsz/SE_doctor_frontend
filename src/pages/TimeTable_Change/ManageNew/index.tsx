@@ -1,13 +1,13 @@
-import React, { useRef } from 'react';
-import { PlusOutlined, EllipsisOutlined, ArrowLeftOutlined } from '@ant-design/icons';
-import { Button, Tag, Space, Menu, Dropdown, notification } from 'antd';
-import type { ProColumns, ActionType } from '@ant-design/pro-table';
-import ProTable, { TableDropdown } from '@ant-design/pro-table';
-import request from 'umi-request';
-import { scheduleItem } from './data.js';
-import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
-import { history } from 'umi';
-import { DeleteSchedule,ListSchedule } from './service';
+import { ArrowLeftOutlined, PlusOutlined } from '@ant-design/icons';
+import type { ActionType, ProColumns } from '@ant-design/pro-table';
+import ProTable from '@ant-design/pro-table';
+import { Button, Menu, notification } from 'antd';
+import moment from 'moment';
+import React, { FC, useRef } from 'react';
+import { Link } from 'react-router-dom';
+import { history, request, useParams } from 'umi';
+import { DoctorDetailType, scheduleItem } from './data.js';
+import { DeleteSchedule, ListSchedule } from './service';
 
 function getInfoUrl(record: scheduleItem) {
   return `/TimeTable_Change/details/${record.date}`;
@@ -30,10 +30,9 @@ const deleteSchedule = async (id) => {
         description: '删除成功',
         message: '删除成功',
       });
-      history.push("/doctors");
+      history.push('/doctors');
       // window.history.back();
       // window.location.reload();
-
     } else {
       notification.error({
         duration: 4,
@@ -49,7 +48,7 @@ const deleteSchedule = async (id) => {
       description: '请求失败，请稍后重新尝试',
     });
   }
-}
+};
 
 const columns: ProColumns<scheduleItem>[] = [
   {
@@ -75,7 +74,7 @@ const columns: ProColumns<scheduleItem>[] = [
   {
     title: '时间段',
     key: 'section',
-    dataIndex: 'section',
+    dataIndex: 'time',
     // valueType: 'string',
     // sorter: true,
     hideInSearch: true,
@@ -83,7 +82,7 @@ const columns: ProColumns<scheduleItem>[] = [
   {
     title: '医生',
     key: 'doctor',
-    dataIndex: 'doctor',
+    dataIndex: 'doctor_name',
     copyable: true,
     // valueType: 'string',
     // sorter: true,
@@ -94,21 +93,34 @@ const columns: ProColumns<scheduleItem>[] = [
     valueType: 'option',
     key: 'option',
     render: (text, record, _, action) => [
-      <Link className="to" to={{pathname: getInfoUrl(record)}} key="view">查看</Link>,
-      <Link className="to" to={{pathname: getEditUrl(record)}} key="view">编辑</Link>,
-      
-      <a href={getDeleteUrl(record)} target="_blank" rel="noopener noreferrer" key="view" onClick={
-        (e) => {
+      <Link className="to" to={{ pathname: getInfoUrl(record) }} key="view">
+        查看
+      </Link>,
+      <Link className="to" to={{ pathname: getEditUrl(record) }} key="view">
+        编辑
+      </Link>,
+
+      <a
+        href={getDeleteUrl(record)}
+        target="_blank"
+        rel="noopener noreferrer"
+        key="view"
+        onClick={(e) => {
           e.preventDefault();
           deleteSchedule(record.date);
-        }
-      }>
-      删除
+        }}
+      >
+        删除
       </a>,
     ],
   },
 ];
 
+interface IParam {
+  department: string;
+}
+
+let department: string;
 
 const menu = (
   <Menu>
@@ -118,41 +130,53 @@ const menu = (
   </Menu>
 );
 
-const ManageNew = () => {
+const ManageNew: FC = () => {
   const actionRef = useRef<ActionType>();
+  department = useParams<IParam>().department;
+
   return (
     <ProTable<scheduleItem>
       columns={columns}
       actionRef={actionRef}
       cardBordered
+      request={async (params = {}, sort, filter) => {
+        const response = await ListSchedule({ ...params, dept_id: department }).then(
+          async (res: { data: scheduleItem[]; status: number; msg: string }) => {
+            let _data_promise = await res.data.map(async (item) => {
+              /// re-format date string...
+              item.date = moment(item.date).format('yyyy年MM月DD日 HH:mm');
 
-      request= {
-        async (params = {}, sort, filter) => {
-          const response = await ListSchedule(params).then(res => {
-            // console.log(res.data.dataSource)
-            console.log(res.data)
-            const result = {
-              data: res.data.department,
-              total: res.data.return_count,
-              success: res.success,
-              pageSize: res.pageSize,
-              current: res.current,
+              /// calculate doctor name...
+              let doctor_detail: { data: DoctorDetailType; status: number; msg: string } =
+                await request('/api/doctor/details', {
+                  method: 'GET',
+                  params: { doctor_id: item.doctor_id },
+                });
+
+              item.doctor_name = doctor_detail.data.name;
+
+              console.log(item);
+
+              return item;
+            });
+
+            let _data: scheduleItem[] = [];
+
+            for (let i = 0; i < _data_promise.length; i = i + 1) {
+              _data.push(await _data_promise[i]);
             }
-            return result
-          })
-          return Promise.resolve(response)
-        }
-      }
-      // request={async (params = {}, sort, filter) => {
-      //   // console.log(sort, filter);
-      //   // console.log(params);
-      //   // console.log(params.name);
-      //   return request<{
-      //     data: scheduleItem[];
-      //   }>('/api/TimeTable_Change/getSchedule', {
-      //     params,
-      //   });
-      // }}
+
+            const result = {
+              data: _data,
+              total: _data.length,
+              status: res.status == 100,
+              pageSize: 20,
+            };
+            return result;
+          },
+        );
+        return Promise.resolve(response);
+      }}
       editable={{
         type: 'multiple',
       }}
@@ -167,18 +191,18 @@ const ManageNew = () => {
       search={{
         labelWidth: 'auto',
       }}
-    //   form={{
-    //     // 由于配置了 transform，提交的参与与定义的不同这里需要转化一下
-    //     syncToUrl: (values, type) => {
-    //       if (type === 'get') {
-    //         return {
-    //           ...values,
-    //           created_at: [values.startTime, values.endTime],
-    //         };
-    //       }
-    //       return values;
-    //     },
-    //   }}
+      //   form={{
+      //     // 由于配置了 transform，提交的参与与定义的不同这里需要转化一下
+      //     syncToUrl: (values, type) => {
+      //       if (type === 'get') {
+      //         return {
+      //           ...values,
+      //           created_at: [values.startTime, values.endTime],
+      //         };
+      //       }
+      //       return values;
+      //     },
+      //   }}
       pagination={{
         pageSize: 5,
         onChange: (page) => console.log(page),
@@ -186,7 +210,14 @@ const ManageNew = () => {
       dateFormatter="string"
       headerTitle="排班列表"
       toolBarRender={() => [
-        <Button key="button" icon={<ArrowLeftOutlined />} type="primary" onClick={() => {history.push("/TimeTable_Change")}}>
+        <Button
+          key="button"
+          icon={<ArrowLeftOutlined />}
+          type="primary"
+          onClick={() => {
+            history.push('/TimeTable_Change');
+          }}
+        >
           返回科室列表
         </Button>,
         <Button key="button" icon={<PlusOutlined />} type="primary">

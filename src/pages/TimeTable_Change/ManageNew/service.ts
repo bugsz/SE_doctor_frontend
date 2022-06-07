@@ -1,6 +1,7 @@
 import { request } from 'umi';
 
 export async function ListSchedule(params) {
+  console.log(params);
   return request("/api/admin/schedule/get", {
     method: "GET",
     params: { ...params },
