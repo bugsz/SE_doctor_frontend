@@ -6,23 +6,41 @@ import { useParams, useRequest } from 'umi';
 import type { patientInfoType } from './data';
 import { deletePatient, queryPatientInfo, uploadDiagnosis } from './service';
 import styles from './style.less';
+import { useState } from 'react';
 
 interface IParam {
   id?: string;
 }
 
-const Diagnosis: FC = () => {
+const Diagnosis: FC = (props) => {
   // const { loading: patientInfoLoading, data: patientInfo } = useRequest({
   //   url: '/api/doctor/patient_info/get',
   //   method: 'GET',
   //   params: useParams<IParam>(),
   // });
+  const [patientInfo, setPatientInfo] = useState<patientInfoType>();
 
-  const { loading: patientInfoLoading, data: _patientInfo } = useRequest(queryPatientInfo, {
-    defaultParams: [useParams<IParam>()],
-  });
+  const id = props.match.params.id;
+  const get = async () => {
+    console.log(id)
+    await queryPatientInfo(id).then((res) => {
+      console.log(res)
+      setPatientInfo(res)
+    })
+  }
 
-  const patientInfo = _patientInfo!;
+  const { loading: patientInfoLoading} = useRequest(
+    get
+  //   queryPatientInfo, {
+  //   defaultParams: [useParams<IParam>()],
+  //   onSuccess: (res) => {
+  //     console.log(res);
+  //     console.log("Success")
+  //   }
+  // }
+  );
+
+  // const patientInfo = _patientInfo!;
 
   // console.log(useParams<IParam>());
   console.log(patientInfoLoading);
@@ -39,7 +57,7 @@ const Diagnosis: FC = () => {
             <Descriptions.Item label="年龄">{item.age}</Descriptions.Item>
             <Descriptions.Item label="电话">{item.phone}</Descriptions.Item>
           </Descriptions>
-        ) : null}
+        ) : (null) }
         {!patientInfoLoading ? (
           <Card type="inner" title="患者病史">
             {item.history?.map((str, index) => {
@@ -55,14 +73,14 @@ const Diagnosis: FC = () => {
               );
             })}
           </Card>
-        ) : null}
+        ) : (null)}
       </Card>
     );
   }
 
   return (
     <PageContainer>
-      {renderPatientInfo(patientInfo)}
+      {patientInfoLoading ? <></> : renderPatientInfo(patientInfo)}
       <Card title="诊断意见" className={styles.activeCard}>
         <ProForm
           onFinish={async (values) => {
