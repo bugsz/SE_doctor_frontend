@@ -36,8 +36,9 @@ const description = (currentDoctor) => {
 };
 
 const avatar = (currentDoctor) => {
+    const photo = 'https://gw.alipayobjects.com/zos/rmsportal/BiazfanxmamNRoxxVxka.png'
     return (
-        <img className={styles.moreInfo} src={currentDoctor.photo} />
+        <img className={styles.moreInfo} src={photo} />
         // <Avatar className={styles.moreInfo} src={currentDoctor.photo}/>
     );
 }
