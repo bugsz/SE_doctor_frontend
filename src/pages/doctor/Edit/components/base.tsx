@@ -9,8 +9,7 @@ import ProForm, {
 import { useRequest } from 'umi';
 
 import styles from './BaseView.less';
-import { ListDoctorDetails, ModifyDoctorInfo } from '../../service';
-import { DoctorItem } from '../../data';
+import { ListDoctorDetails, ModifyDoctorInfo } from '../service';
 
 const validatorPhone = (rule: any, value: string[], callback: (message?: string) => void) => {
   if (!value[0]) {
@@ -50,7 +49,7 @@ const BaseView: React.FC<BaseViewProps> = ( {id, children} ) => {
     run: refreshCurrent,
     loading,
   } = useRequest(() => {
-    return ListDoctorDetails(id!);
+    return ListDoctorDetails(id);
   });
 
   const getAvatarURL = () => {
@@ -64,10 +63,10 @@ const BaseView: React.FC<BaseViewProps> = ( {id, children} ) => {
     return '';
   };
 
-  const handleFinish = async (values: DoctorItem) => {
+  const handleFinish = async (values) => {
     console.log(values);
     try {
-      const msg = await ModifyDoctorInfo(id!, values);
+      const msg = await ModifyDoctorInfo(id, values);
       // console.log(msg)
       if (msg.status === 100) {
         notification.success({

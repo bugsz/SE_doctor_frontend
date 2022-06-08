@@ -21,14 +21,6 @@ declare namespace API {
     };
     address?: string;
     phone?: string;
-    
-    role: string;
-    id: string;
-    gender: string;
-    age: Number;
-    position: string;
-    department: string;
-    access: Number;
   };
 
   type LoginResult = {
