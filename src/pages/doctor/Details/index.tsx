@@ -1,54 +1,46 @@
-import { ProTable } from '@ant-design/pro-components';
-import { PageContainer } from '@ant-design/pro-layout';
-import type { ProFieldFCMode } from '@ant-design/pro-utils';
-import { Descriptions, message } from 'antd';
-import React, { FC, useState } from 'react';
-import { useParams, useRequest } from 'umi';
-import { DoctorItem } from '../data';
-import { ListDoctorDetails, ListDoctorSchedule } from '../service';
+import request from 'umi-request';
+import { useRequest } from 'umi';
 import styles from './style.less';
 
-interface IParam {
-  id: string;
-}
+import React, { useState } from 'react';
+import { Radio, Switch, Space, Descriptions, message, Avatar, Card, Row, Col } from 'antd';
+import type { ProFieldFCMode } from '@ant-design/pro-utils';
 
-const emptyDoctor: DoctorItem = {
-  doctor_id: '',
-  name: '',
-  gender: '',
-  age: 0,
-  dept_id: '',
-  position: '',
+import { ListDoctorDetails, ListDoctorSchedule } from "./service";
+import {GridContent, PageContainer, RouteContext } from "@ant-design/pro-layout";
 
-  password: '',
-};
+import type { ProColumns } from '@ant-design/pro-components';
+import { ProTable } from '@ant-design/pro-components';
 
-const description = (currentDoctor: DoctorItem) => {
-  return (
-    <Descriptions className={styles.headerList} column={2}>
-      <Descriptions.Item label="姓名">{currentDoctor.name}</Descriptions.Item>
-      <Descriptions.Item label="工号">{currentDoctor.doctor_id}</Descriptions.Item>
-      <Descriptions.Item label="性别">{currentDoctor.gender} </Descriptions.Item>
-      <Descriptions.Item label="年龄">{currentDoctor.age.toString()} </Descriptions.Item>
-      <Descriptions.Item label="职位">{currentDoctor.position} </Descriptions.Item>
-      <Descriptions.Item label="科室">{currentDoctor.dept_id} </Descriptions.Item>
-    </Descriptions>
+
+const description = (currentDoctor) => {
+    return (
+            <Descriptions className={styles.headerList} column={2}>
+            <Descriptions.Item label="姓名">{currentDoctor.name}</Descriptions.Item>
+            <Descriptions.Item label="工号">{currentDoctor.doctor_id}</Descriptions.Item>
+            <Descriptions.Item label="性别">{currentDoctor.gender} </Descriptions.Item>
+            <Descriptions.Item label="年龄">{currentDoctor.age} </Descriptions.Item>
+            <Descriptions.Item label="职位">{currentDoctor.position} </Descriptions.Item>
+            <Descriptions.Item label="科室">{currentDoctor.dept_id} </Descriptions.Item>
+
+            </Descriptions>
     //    </Card>
 
     //     <Card cover={<img src={currentDoctor.photo}/>} />
 
+
     //     {/* <Avatar className={styles.avatarHolder} src={currentDoctor.photo} /> */}
-
+        
     // </>
-  );
+    )
 };
 
-const avatar = (currentDoctor: DoctorItem) => {
-  return (
-    <img className={styles.moreInfo} src={currentDoctor.photo} />
-    // <Avatar className={styles.moreInfo} src={currentDoctor.photo}/>
-  );
-};
+const avatar = (currentDoctor) => {
+    return (
+        <img className={styles.moreInfo} src={currentDoctor.photo} />
+        // <Avatar className={styles.moreInfo} src={currentDoctor.photo}/>
+    );
+}
 
 const Details: FC = (props) => {
   const [state, setState] = useState<ProFieldFCMode>('read');
@@ -56,11 +48,12 @@ const Details: FC = (props) => {
   const [tabStatus, setTabStatus] = useState({
     tabActiveKey: 'schedule',
   });
-  const [currentDoctor, setCurrentDoctor] = useState<DoctorItem>(emptyDoctor);
-  const [currentSchedule, setCurrentSchedule] = useState<any[]>([]);          // FIXME: typing
-  const [tableListDataSource, setTableListDataSource] = useState<any[]>([]);  //
+  const [currentDoctor, setCurrentDoctor] = useState({});
+  const [currentSchedule, setCurrentSchedule] = useState([]);
+  const [tableListDataSource, setTableListDataSource] = useState([]);
 
   // const id = props.match.params.id;
+
 
   const createScheduleList = () => {
     setTableListDataSource([]);
@@ -73,7 +66,7 @@ const Details: FC = (props) => {
         availability: schedule[i].availability,
       });
     }
-    console.log(tableListDataSource);
+    console.log(tableListDataSource)
   };
 
   const getSchedule = async () => {
@@ -115,7 +108,7 @@ const Details: FC = (props) => {
         content: '获取排班信息失败，请稍后重试',
       });
     },
-  });
+  );
 
   const transform = (item) => {
     let time_str, date_str;
@@ -162,6 +155,8 @@ const Details: FC = (props) => {
     </>
   );
 
+  
+
   const scheduleList = (
     <ProTable<any>
       columns={[
@@ -202,11 +197,13 @@ const Details: FC = (props) => {
   );
 
   const content = {
-    schedule: scheduleList,
+      schedule: scheduleList
   };
   const onTabChange = (tabActiveKey) => {
-    setTabStatus({ ...tabStatus, tabActiveKey });
-  };
+      setTabStatus({ ...tabStatus, tabActiveKey });
+  }
+
+
 
   return (
     <>
@@ -236,9 +233,12 @@ const Details: FC = (props) => {
       </Space>
       <br />
       <br /> */}
-        </PageContainer>
-      )}
+
+      
+    </PageContainer>
+    )}
     </>
+    
   );
 };
 

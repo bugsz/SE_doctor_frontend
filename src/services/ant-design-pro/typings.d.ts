@@ -21,7 +21,7 @@ declare namespace API {
     };
     address?: string;
     phone?: string;
-    
+
     role: string;
     id: string;
     gender: string;

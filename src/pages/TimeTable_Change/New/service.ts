@@ -6,7 +6,7 @@ import { request } from 'umi';
 //       method: 'GET',
 //     });
 //   }
-
+  
 //   export async function updateInfo(body) {
 //     return request('/api/user/me', {
 //       method: 'PUT',
@@ -17,11 +17,20 @@ import { request } from 'umi';
 //     });
 //   }
 
-export async function ListDoctorDetails(id: string) {
+export async function ListDoctorDetails(id, data, options) {
   console.log(id);
-  // console.log(options);
-  return request('/api/TimeTable_Change/details', {
-    method: 'GET',
-    params: { id: id },
+  console.log(options);
+  return request("/api/doctor/details", {
+    method: "GET",
+    params: {id: id},
+  })
+};
+
+export async function AddDoctorInfo(id, data, options) {
+  console.log("add")
+  console.log(data)
+  return request("/api/doctor/create", {
+    method: "POST",
+    data: data,
   });
 }

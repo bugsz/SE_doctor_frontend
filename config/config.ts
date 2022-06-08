@@ -408,7 +408,23 @@ export default defineConfig({
     },
 
     {
-      path: "/TimeTable_Change/edit/:date",
+      path: "/TimeTable_Change/details",
+      name: "排班信息",
+      hideInMenu: true,
+      component: "./TimeTable_Change/Details",
+    },
+
+    {
+      name: "新建排班",
+      icon: 'user',
+      path: '/TimeTable_Change/new',
+      component: './TimeTable_Change/New',
+      hideInMenu: true,
+      access: "canAdmin",
+    },
+
+    {
+      path: "/TimeTable_Change/edit",
       name: "排班编辑",
       hideInMenu: true,
       component: "./TimeTable_Change/Edit",

@@ -12,5 +12,5 @@ const UpdateDoctorInfo = async (req, res) => {
 }
 
 export default {
-    // "POST /api/TimeTable_Change/update": UpdateDoctorInfo,
+    "POST /api/doctor/update": UpdateDoctorInfo,
 }

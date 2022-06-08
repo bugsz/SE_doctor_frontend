@@ -7,32 +7,32 @@ import { Radio, Switch, Space, Descriptions, message, Avatar, Card, Row, Col } f
 import type { ProFieldFCMode } from '@ant-design/pro-utils';
 
 import Field from '@ant-design/pro-field';
-import { ListDoctorDetails } from "./service";
+import { ListScheduleDetails } from "./service";
 import {GridContent, PageContainer, RouteContext } from "@ant-design/pro-layout";
 
 
-const description = (currentDoctor) => {
+const description = (currentSchedule) => {
     return (
     // <div className="site-card-wrapper">
     //     <Row gutter={16}>
     //     <Col span={8}>
     //         <Card bordered={false}>
     //             <Descriptions className={styles.headerList} column={2}>
-    //             <Descriptions.Item label="姓名">{currentDoctor.department}</Descriptions.Item>
-    //             <Descriptions.Item label="性别">{currentDoctor.gender} </Descriptions.Item>
+    //             <Descriptions.Item label="姓名">{currentSchedule.department}</Descriptions.Item>
+    //             <Descriptions.Item label="性别">{currentSchedule.gender} </Descriptions.Item>
                 
-    //             <Descriptions.Item label="年龄">{currentDoctor.age} </Descriptions.Item>
+    //             <Descriptions.Item label="年龄">{currentSchedule.age} </Descriptions.Item>
 
-    //             <Descriptions.Item label="职位">{currentDoctor.position} </Descriptions.Item>
+    //             <Descriptions.Item label="职位">{currentSchedule.position} </Descriptions.Item>
 
-    //             <Descriptions.Item label="科室">{currentDoctor.department} </Descriptions.Item>
+    //             <Descriptions.Item label="科室">{currentSchedule.department} </Descriptions.Item>
 
     //             </Descriptions>
     //         </Card>
     //     </Col>
     //     <Col span={8}>
     //         <Card bordered={false} 
-    //             cover={<img src={currentDoctor.photo}/>}
+    //             cover={<img src={currentSchedule.photo}/>}
     //             className={styles.avatarHolder}
     //             style={{width: 90, height: 160}} />
     //     </Col>
@@ -41,28 +41,29 @@ const description = (currentDoctor) => {
 
     // <>
     //    <Card bordered={false}>
-            <Descriptions className={styles.headerList} column={2}>
-            <Descriptions.Item label="日期">{currentDoctor.date}</Descriptions.Item>
-            <Descriptions.Item label="时间段">{currentDoctor.section}</Descriptions.Item>
-            <Descriptions.Item label="值班医生">{currentDoctor.doctor}</Descriptions.Item>
+            <Descriptions className={styles.headerList} column={1}>
+            <Descriptions.Item label="日期">{currentSchedule.date}</Descriptions.Item>
+            <Descriptions.Item label="时间段">{currentSchedule.section}</Descriptions.Item>
+            <Descriptions.Item label="值班医生">{currentSchedule.doctor}</Descriptions.Item>
             </Descriptions>
+            
     //    </Card>
 
-    //     <Card cover={<img src={currentDoctor.photo}/>} />
+    //     <Card cover={<img src={currentSchedule.photo}/>} />
 
 
-    //     {/* <Avatar className={styles.avatarHolder} src={currentDoctor.photo} /> */}
+    //     {/* <Avatar className={styles.avatarHolder} src={currentSchedule.photo} /> */}
         
     // </>
     )
 };
 
-const avatar = (currentDoctor) => {
-    return (
-        <img className={styles.moreInfo} src={currentDoctor.photo} />
-        // <Avatar className={styles.moreInfo} src={currentDoctor.photo}/>
-    );
-}
+// const avatar = (currentSchedule) => {
+//     return (
+//         <img className={styles.moreInfo} src={currentSchedule.photo} />
+//         // <Avatar className={styles.moreInfo} src={currentSchedule.photo}/>
+//     );
+// }
 
 const Details = (props) => {
   const [state, setState] = useState<ProFieldFCMode>('read');
@@ -73,14 +74,14 @@ const Details = (props) => {
 
   // const id = props.match.params.id;
   const {
-      data: currentDoctor,
+      data: currentSchedule,
       run: refreshCurrent,
       loading: loadingProject, 
   } = useRequest(
       () => {
-    //   const doctor = ListDoctorDetails(props.match.params.id);
+    //   const doctor = ListScheduleDetails(props.match.params.id);
     //   console.log(id, doctor);
-      return ListDoctorDetails(props.match.params.date);
+      return ListScheduleDetails(props.match.params.date);
     },
     {
         onSuccess: (data, param) => {
@@ -105,8 +106,11 @@ const Details = (props) => {
 
 
   const arrangement = ( 
-    <h1>如果对排班有问题，请联系陈一航<p>qq邮箱：2503377821@qq.com</p></h1>
-
+    <h1>
+      如果对排班有问题，请联系管理员
+      <p>联系电话：12345678</p>
+    </h1>
+    
   );
   const content = {
       arrangement: arrangement
@@ -123,10 +127,10 @@ const Details = (props) => {
     <PageContainer
          className={styles.pageHeader} 
          title={'基本信息'}
-         content={description(currentDoctor)}
+         content={description(currentSchedule)}
          tabActiveKey={tabStatus.tabActiveKey}
          onTabChange={onTabChange}
-         //extraContent={avatar(currentDoctor)}
+         //extraContent={avatar(currentSchedule)}
          tabList={[
              {
                  key: 'arrangement',
