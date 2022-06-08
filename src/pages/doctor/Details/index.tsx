@@ -42,11 +42,11 @@ const avatar = (currentDoctor) => {
     );
 }
 
-const Details = (props) => {
+const Details: FC = (props) => {
   const [state, setState] = useState<ProFieldFCMode>('read');
   const [plain, setPlain] = useState<boolean>(false);
   const [tabStatus, setTabStatus] = useState({
-    tabActiveKey: 'arrangement',
+    tabActiveKey: 'schedule',
   });
   const [currentDoctor, setCurrentDoctor] = useState({});
   const [currentSchedule, setCurrentSchedule] = useState([]);
@@ -56,126 +56,145 @@ const Details = (props) => {
 
 
   const createScheduleList = () => {
-    setTableListDataSource([])
-    for (let i=0;i<currentSchedule.length;i+=1) {
+    setTableListDataSource([]);
+    const schedule = currentSchedule.arrangement_list
+    for (let i = 0; i < schedule.length; i += 1) {
       tableListDataSource.push({
-        name: currentDoctor?currentDoctor.doctor_name:"未知",
-        department: currentDoctor?currentDoctor.department:"未知",
-        schedule: transform(currentSchedule[i]),
-        availability: currentSchedule[i].availability,
-      })
+        name: currentDoctor ? currentDoctor.name : '未知',
+        department: currentDoctor ? currentDoctor.dept_id : '未知',
+        schedule: transform(schedule[i]),
+        availability: schedule[i].availability,
+      });
     }
     console.log(tableListDataSource)
   };
 
-  const get = async () => {
-    console.log(loadingProject)
-    await ListDoctorDetails(props.match.params.id).then(res => {
-      console.log(res);
-      setCurrentDoctor(res.data);
-    }).then(async () => {
-      console.log(loadingProject)
-      await ListDoctorSchedule(props.match.params.id).then(
-        res => {
-          const data = Array.from(res.data) 
-          setCurrentSchedule(data)
-          console.log(currentSchedule)
-        })
-    })
+  const getSchedule = async () => {
+    console.log(loadingProject);
+    await ListDoctorSchedule(props.match.params.id).then((res) => {
+      const data = Array.from(res.data);
+      setCurrentSchedule(data);
+      console.log(currentSchedule);
+    });
+  }
+
+  const getDetail = async () => {
+    console.log(loadingProject);
+    await ListDoctorDetails(props.match.params.id)
+      .then((res) => {
+        console.log(res);
+        setCurrentDoctor(res.data);
+      })
   };
 
-  const {
-      run: refreshCurrent,
-      loading: loadingProject, 
-  } = useRequest(get,
-    {
-        onError: (error, param) => {
-        message.error({
-            duration: 4,
-            content: '获取项目详情失败，请稍后重试',
-        });
-        },
+  // const get = async () => {
+  //   getSchedule()
+  //   getDetail()
+  // }
+
+  const { run: refreshCurrent, loading: loadingProject } = useRequest(getDetail, {
+    onError: (error, param) => {
+      message.error({
+        duration: 4,
+        content: '获取医生详情失败，请稍后重试',
+      });
     },
+  });
+
+  const { loading: loadingSchedule } = useRequest(getSchedule, {
+    onError: (error, param) => {
+      message.error({
+        duration: 4,
+        content: '获取排班信息失败，请稍后重试',
+      });
+    }},
   );
 
   const transform = (item) => {
-    let time_str, date_str
-    switch(item.time_id) {
-      case 1:
-        time_str = "上午"
-        break
-      case 2:
-        time_str = "下午"
-        break
-      case 3:
-        time_str = "晚上"
-        break
-      default:
-        time_str = "未知"
-        break
-    }
+    let time_str, date_str;
+    if (item.time == "morning") 
+      time_str = "上午";
+    else if (item.time == "afternoon")
+      time_str = "下午";
+    else if (item.time == "evening")
+      time_str = "晚上"
+    else time_str = item.time
+    // switch (item.time) {
+    //   case "morning":
+    //     time_str = '上午';
+    //     break;
+    //   case "afternoon":
+    //     time_str = '下午';
+    //     break;
+    //   case "night":
+    //     time_str = '晚上';
+    //     break;
+    //   default:
+    //     time_str = '未知';
+    //     break;
+    // }
 
-    date_str = item.schedule_id
-    return date_str + " " + time_str
-
-  }
+    date_str = item.date;
+    return date_str + ' ' + time_str;
+  };
 
   const schedule = (
     //{
-      <>{
-        loadingProject ? (null) : (
-          currentSchedule.length === 0 ? (<div>暂无排班</div>) :
-          currentSchedule.map((item, index) => {
-            return (
-              
-              <div key={index}>
-                <p>{transform(item)}</p>
-              </div>
-            )
-          })
-        )
-      }</>
+    <>
+      {loadingSchedule || loadingProject ? null : currentSchedule.length === 0 ? (
+        <div>暂无排班</div>
+      ) : (
+        currentSchedule.map((item, index) => {
+          return (
+            <div key={index}>
+              <p>{transform(item)}</p>
+            </div>
+          );
+        })
+      )}
+    </>
   );
 
   
 
   const scheduleList = (
     <ProTable<any>
-        columns={[
-          {
-            dataIndex: 'name',
-            title: '姓名',
-          },
-          {
-            dataIndex: 'department',
-            title: '部门',
-          },
-          {
-            dataIndex: 'schedule',
-            title: '时间',
-          },
-          {
-            title: '余量',
-            dataIndex: 'availability',
-          },
-        ]}
-        request={(params, sorter, filter) => {
-          // 表单搜索项会从 params 传入，传递给后端接口。
-          console.log(params, sorter, filter);
-          createScheduleList()
-          return Promise.resolve({
-            data: tableListDataSource,
-            success: true,
-          });
-        }}
-        rowKey="outUserNo"
-        pagination={{
-          showQuickJumper: true,
-        }}
-        toolBarRender={false}
-        search={false}
-      />
-  )
+      columns={[
+        {
+          dataIndex: 'name',
+          title: '姓名',
+        },
+        {
+          dataIndex: 'department',
+          title: '部门',
+        },
+        {
+          dataIndex: 'schedule',
+          title: '时间',
+        },
+        {
+          title: '余量',
+          dataIndex: 'availability',
+        },
+      ]}
+      request={(params, sorter, filter) => {
+        // 表单搜索项会从 params 传入，传递给后端接口。
+        console.log(params, sorter, filter);
+        createScheduleList();
+        return Promise.resolve({
+          data: tableListDataSource,
+          success: true,
+          total: tableListDataSource.length,
+        });
+      }}
+      rowKey="outUserNo"
+      pagination={{
+        showQuickJumper: true,
+      }}
+      toolBarRender={false}
+      search={false}
+    />
+  );
 
   const content = {
       schedule: scheduleList
@@ -188,22 +207,23 @@ const Details = (props) => {
 
   return (
     <>
-    {loadingProject ? null : (
-    <PageContainer
-         className={styles.pageHeader} 
-         title={'基本信息'}
-         content={description(currentDoctor)}
-         tabActiveKey={tabStatus.tabActiveKey}
-         onTabChange={onTabChange}
-         extraContent={avatar(currentDoctor)}
-         tabList={[
-             {
-                 key: 'schedule',
-                 tab: '排班',
-             }
-         ]}>
-        {content[tabStatus.tabActiveKey]}
-      {/* <Space>
+      {loadingProject || loadingSchedule ? null : (
+        <PageContainer
+          className={styles.pageHeader}
+          title={'基本信息'}
+          content={description(currentDoctor)}
+          tabActiveKey={tabStatus.tabActiveKey}
+          onTabChange={onTabChange}
+          extraContent={avatar(currentDoctor)}
+          tabList={[
+            {
+              key: 'schedule',
+              tab: '排班',
+            },
+          ]}
+        >
+          {content[tabStatus.tabActiveKey]}
+          {/* <Space>
         <Radio.Group onChange={(e) => setState(e.target.value as ProFieldFCMode)} value={state}>
           <Radio value="read">只读</Radio>
           <Radio value="edit">编辑</Radio>

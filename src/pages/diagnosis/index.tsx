@@ -58,7 +58,7 @@ const Diagnosis: FC = (props) => {
           <Descriptions title="患者信息">
             <Descriptions.Item label="姓名">{item.name}</Descriptions.Item>
             <Descriptions.Item label="性别">{item.gender}</Descriptions.Item>
-            <Descriptions.Item label="年龄">{18}</Descriptions.Item>
+            <Descriptions.Item label="年龄">{item.age}</Descriptions.Item>
             <Descriptions.Item label="电话">{item.phone}</Descriptions.Item>
           </Descriptions>
         ) : null}
