@@ -107,7 +107,7 @@ const Details: FC = (props) => {
         duration: 4,
         content: '获取排班信息失败，请稍后重试',
       });
-    },
+    }},
   );
 
   const transform = (item) => {
