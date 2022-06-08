@@ -50,11 +50,11 @@ const avatar = (currentDoctor: DoctorItem) => {
   );
 };
 
-const Details: FC = () => {
+const Details: FC = (props) => {
   const [state, setState] = useState<ProFieldFCMode>('read');
   const [plain, setPlain] = useState<boolean>(false);
   const [tabStatus, setTabStatus] = useState({
-    tabActiveKey: 'arrangement',
+    tabActiveKey: 'schedule',
   });
   const [currentDoctor, setCurrentDoctor] = useState<DoctorItem>(emptyDoctor);
   const [currentSchedule, setCurrentSchedule] = useState<any[]>([]);          // FIXME: typing
@@ -64,68 +64,91 @@ const Details: FC = () => {
 
   const createScheduleList = () => {
     setTableListDataSource([]);
-    for (let i = 0; i < currentSchedule.length; i += 1) {
+    const schedule = currentSchedule.arrangement_list
+    for (let i = 0; i < schedule.length; i += 1) {
       tableListDataSource.push({
         name: currentDoctor ? currentDoctor.name : '未知',
         department: currentDoctor ? currentDoctor.dept_id : '未知',
-        schedule: transform(currentSchedule[i]),
-        availability: currentSchedule[i].availability,
+        schedule: transform(schedule[i]),
+        availability: schedule[i].availability,
       });
     }
     console.log(tableListDataSource);
   };
 
-  const get = async () => {
+  const getSchedule = async () => {
     console.log(loadingProject);
-    await ListDoctorDetails(useParams<IParam>().id)
+    await ListDoctorSchedule(props.match.params.id).then((res) => {
+      const data = Array.from(res.data);
+      setCurrentSchedule(data);
+      console.log(currentSchedule);
+    });
+  }
+
+  const getDetail = async () => {
+    console.log(loadingProject);
+    await ListDoctorDetails(props.match.params.id)
       .then((res) => {
         console.log(res);
         setCurrentDoctor(res.data);
       })
-      .then(async () => {
-        console.log(loadingProject);
-        await ListDoctorSchedule(useParams<IParam>().id).then((res) => {
-          const data = Array.from(res.data);
-          setCurrentSchedule(data);
-          console.log(currentSchedule);
-        });
-      });
   };
 
-  const { run: refreshCurrent, loading: loadingProject } = useRequest(get, {
+  // const get = async () => {
+  //   getSchedule()
+  //   getDetail()
+  // }
+
+  const { run: refreshCurrent, loading: loadingProject } = useRequest(getDetail, {
     onError: (error, param) => {
       message.error({
         duration: 4,
-        content: '获取项目详情失败，请稍后重试',
+        content: '获取医生详情失败，请稍后重试',
+      });
+    },
+  });
+
+  const { loading: loadingSchedule } = useRequest(getSchedule, {
+    onError: (error, param) => {
+      message.error({
+        duration: 4,
+        content: '获取排班信息失败，请稍后重试',
       });
     },
   });
 
   const transform = (item) => {
     let time_str, date_str;
-    switch (item.time_id) {
-      case 1:
-        time_str = '上午';
-        break;
-      case 2:
-        time_str = '下午';
-        break;
-      case 3:
-        time_str = '晚上';
-        break;
-      default:
-        time_str = '未知';
-        break;
-    }
+    if (item.time == "morning") 
+      time_str = "上午";
+    else if (item.time == "afternoon")
+      time_str = "下午";
+    else if (item.time == "evening")
+      time_str = "晚上"
+    else time_str = item.time
+    // switch (item.time) {
+    //   case "morning":
+    //     time_str = '上午';
+    //     break;
+    //   case "afternoon":
+    //     time_str = '下午';
+    //     break;
+    //   case "night":
+    //     time_str = '晚上';
+    //     break;
+    //   default:
+    //     time_str = '未知';
+    //     break;
+    // }
 
-    date_str = item.schedule_id;
+    date_str = item.date;
     return date_str + ' ' + time_str;
   };
 
   const schedule = (
     //{
     <>
-      {loadingProject ? null : currentSchedule.length === 0 ? (
+      {loadingSchedule || loadingProject ? null : currentSchedule.length === 0 ? (
         <div>暂无排班</div>
       ) : (
         currentSchedule.map((item, index) => {
@@ -166,6 +189,7 @@ const Details: FC = () => {
         return Promise.resolve({
           data: tableListDataSource,
           success: true,
+          total: tableListDataSource.length,
         });
       }}
       rowKey="outUserNo"
@@ -186,7 +210,7 @@ const Details: FC = () => {
 
   return (
     <>
-      {loadingProject ? null : (
+      {loadingProject || loadingSchedule ? null : (
         <PageContainer
           className={styles.pageHeader}
           title={'基本信息'}

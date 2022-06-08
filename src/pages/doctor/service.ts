@@ -2,7 +2,7 @@ import { request } from 'umi';
 import { DoctorItem } from './data';
 
 export async function ListDoctorDetails(id: string): Promise<{ data: DoctorItem }> {
-  console.log(id);
+  console.log(id);  
   const doctorDetail = request('/api/doctor/details', {
     method: 'GET',
     params: { doctor_id: id },
@@ -14,18 +14,29 @@ export async function ListDoctorDetails(id: string): Promise<{ data: DoctorItem 
 export async function AddDoctorInfo(data: DoctorItem): Promise<{ msg: string; status: Number }> {
   console.log('add');
   console.log(data);
+
+  const school = ["浙江大学医学院", "复旦大学医学院", "协和医学院"]
+  const doctor_school = school[Math.floor(Math.random() * school.length)];
+
   return request('/api/doctor/create', {
     method: 'POST',
-    data: data,
+    data: {
+      ...data, 
+      intro: data.name + "是一个非常优秀的" + data.dept_id + "医生, TA毕业于" + doctor_school + "。",  
+      password: "password",
+      photo: 'https://gw.alipayobjects.com/zos/rmsportal/BiazfanxmamNRoxxVxka.png',
+      
+    }
   });
 }
 
 /// unused?
 export async function ModifyDoctorInfo(id: string, data: any, options?: any) {
-  return request('/api/doctor/modify', {
+
+  return request('/api/doctor/info/modify', {
     method: 'POST',
     params: { doctor_id: id },
-    data: data,
+    data: data
   });
 }
 
@@ -38,7 +49,7 @@ export async function ListDoctorSchedule(id: string, time_delta = 2) {
     },
   });
 
-  // console.log(doctorArrangement)
+  console.log(doctorArrangement)
 
   return doctorArrangement;
 }
