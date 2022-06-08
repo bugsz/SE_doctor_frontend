@@ -9,7 +9,7 @@ import ProForm, {
 import { useRequest } from 'umi';
 
 import styles from './BaseView.less';
-import { ListDoctorDetails, ModifyDoctorInfo } from '../service';
+import { ListDoctorDetails, ModifyDoctorInfo } from '../../service';
 
 const validatorPhone = (rule: any, value: string[], callback: (message?: string) => void) => {
   if (!value[0]) {

@@ -144,7 +144,7 @@ const BaseView: React.FC<BaseViewProps> = ( {id, children} ) => {
 
               <ProFormText
                 width="md"
-                name="doctor_name"
+                name="name"
                 label="姓名"
                 rules={[
                   {
@@ -224,7 +224,7 @@ const BaseView: React.FC<BaseViewProps> = ( {id, children} ) => {
                       label: "消化内科",
                   },
               ]}
-                name="department"
+                name="dept_id"
                 label="科室"
                 rules={[
                   {

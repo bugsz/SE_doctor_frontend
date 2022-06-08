@@ -32,7 +32,7 @@ const PageHeaderContent: FC<{ currentUser: API.CurrentUser }> = ({ currentUser }
       <div className={styles.content}>
         <div className={styles.contentTitle}>
           早安，
-          {currentUser.name} 医生 ，祝你开心每一天！
+          {currentUser.name}医生，祝你开心每一天！
         </div>
         {/* <div>
           {currentUser.title} |{currentUser.group}
@@ -75,6 +75,7 @@ const Board: FC = () => {
 
   const renderAnnounce = (item: AnnounceType) => {
     const events = item.content;
+
     return (
       <List.Item key={item.id}>
         <List.Item.Meta
@@ -83,8 +84,9 @@ const Board: FC = () => {
             <span>
               <a className={styles.title}>{item.title}</a>
               &nbsp;
-              <br></br>
-              <span className={styles.event}>{events}</span>
+              <br></br><br></br>
+              <div className={styles.event} dangerouslySetInnerHTML={{ __html: events }} />
+              {/* <span className={styles.event}>{parser.parseFromString(events)}</span> */}
             </span>
           }
           description={
