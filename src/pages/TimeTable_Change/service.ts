@@ -16,6 +16,18 @@ export async function DeleteSchedule(params: { id: string }) {
   });
 }
 
+export async function UpdateDoctorInfo(params: {
+  schedule_id: string;
+  department?: string;
+  time: string;
+  doctor_id: string;
+}) {
+  return request('/api/admin/schedule/upload', {
+    method: 'POST',
+    params: { ...params },
+  });
+}
+
 // export async function DeleteUser(params) {
 //   return request('/api/users/user', {
 //     method: 'DELETE',

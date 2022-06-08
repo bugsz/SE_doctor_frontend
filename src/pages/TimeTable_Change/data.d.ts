@@ -7,6 +7,7 @@ export type scheduleItem = {
   quota: number;
 
   /// calculated by frontend...
+  raw_date?: string;
   doctor_name: string;
 };
 

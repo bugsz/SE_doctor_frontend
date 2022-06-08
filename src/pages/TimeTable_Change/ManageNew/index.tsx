@@ -102,8 +102,9 @@ const columns: ProColumns<scheduleItem>[] = [
           pathname: '/TimeTable_Change/edit',
           query: {
             name: record.doctor_name,
-            date: record.date,
+            date: record.raw_date,
             time: record.time,
+            doc_id: record.doctor_id,
           },
         }}
         key="view"
@@ -149,6 +150,7 @@ const ManageNew: FC = () => {
 
             let _data_promise = await res.data.map(async (item) => {
               /// re-format date string...
+              item.raw_date = item.date;
               item.date = moment(item.date).format('yyyy年MM月DD日');
 
               /// calculate doctor name...

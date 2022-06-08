@@ -1,9 +1,10 @@
 import ProForm, { ProFormSelect, ProFormText } from '@ant-design/pro-form';
-import { notification } from 'antd';
-import moment from 'moment';
+import { DatePicker, notification } from 'antd';
+import moment, { Moment } from 'moment';
 import React, { ReactNode } from 'react';
 import { Location, useLocation } from 'umi';
-import { UpdateDoctorInfo } from '../service';
+import { scheduleItem } from '../../data';
+import { UpdateDoctorInfo } from '../../service';
 import styles from './BaseView.less';
 
 const validatorPhone = (rule: any, value: string[], callback: (message?: string) => void) => {
@@ -58,10 +59,26 @@ const BaseView: React.FC<BaseViewProps> = ({ id, children }) => {
   //   return '';
   // };
 
-  const handleFinish = async (values: any) => {
+  let curr_date = '';
+
+  const location = useLocation() as Location & {
+    query: { date: string; name: string; time: string; doc_id: string };
+  };
+  console.log(location.query);
+
+  const onDateChange = (date: Moment | null, dateString: string) => {
+    curr_date = dateString.replace(/[-_]/g, '');
+    console.log(curr_date);
+  };
+
+  const handleFinish = async (values: scheduleItem) => {
     console.log(values);
     try {
-      const msg = await UpdateDoctorInfo(id, values);
+      const msg = await UpdateDoctorInfo({
+        schedule_id: curr_date,
+        time: values.time,
+        doctor_id: location.query.doc_id,
+      });
       if (msg.status === 'success') {
         notification.success({
           duration: 4,
@@ -76,7 +93,6 @@ const BaseView: React.FC<BaseViewProps> = ({ id, children }) => {
           description: msg.msg || '更新错误，未知错误类型',
         });
       }
-      // await refreshCurrent();
     } catch (error) {
       notification.error({
         duration: 4,
@@ -85,11 +101,6 @@ const BaseView: React.FC<BaseViewProps> = ({ id, children }) => {
       });
     }
   };
-
-  const location = useLocation() as Location & {
-    query: { date: string; name: string; time: string };
-  };
-  console.log(location.query);
 
   return (
     <div className={styles.baseView}>
@@ -111,19 +122,11 @@ const BaseView: React.FC<BaseViewProps> = ({ id, children }) => {
               }}
               hideRequiredMark
             >
-              <ProFormText
-                width="md"
-                name="date"
-                label="日期"
-                rules={[
-                  {
-                    required: true,
-                    message: '请输入排班日期!',
-                  },
-                ]}
-                initialValue={location.query.date}
-              />
-
+              <DatePicker
+                onChange={onDateChange}
+                picker="date"
+                defaultPickerValue={moment(location.query.date)}
+              /><br></br><br></br>
               <ProFormSelect
                 width="xs"
                 options={[
@@ -150,7 +153,6 @@ const BaseView: React.FC<BaseViewProps> = ({ id, children }) => {
                 ]}
                 initialValue={location.query.time}
               />
-
               <ProFormText
                 width="md"
                 name="name"
