@@ -17,16 +17,16 @@ import { request } from 'umi';
 //     });
 //   }
 
-export async function ListDoctorDetails(id, data, options) {
+export async function ListDoctorDetails(id: string) {
   console.log(id);
-  console.log(options);
+  // console.log(options);
   return request("/api/TimeTable_Change/details", {
     method: "GET",
     params: {id: id},
   })
 };
 
-export async function UpdateDoctorInfo(id, data, options) {
+export async function UpdateDoctorInfo(id, data, options?) {
   return request("/api/TimeTable_Change/update", {
     method: "POST",
     params: {id: id},

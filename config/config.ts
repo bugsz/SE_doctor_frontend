@@ -424,7 +424,7 @@ export default defineConfig({
     },
 
     {
-      path: "/TimeTable_Change/edit/:date",
+      path: "/TimeTable_Change/edit",
       name: "排班编辑",
       hideInMenu: true,
       component: "./TimeTable_Change/Edit",

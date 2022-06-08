@@ -1,17 +1,10 @@
+import ProForm, { ProFormSelect, ProFormText } from '@ant-design/pro-form';
+import { notification } from 'antd';
+import moment from 'moment';
 import React, { ReactNode } from 'react';
-import { UploadOutlined } from '@ant-design/icons';
-import { Button, Input, Upload, message, notification } from 'antd';
-import ProForm, {
-  ProFormDependency,
-  ProFormFieldSet,
-  ProFormSelect,
-  ProFormText,
-  ProFormTextArea,
-} from '@ant-design/pro-form';
-import { useRequest } from 'umi';
-
+import { Location, useLocation } from 'umi';
+import { UpdateDoctorInfo } from '../service';
 import styles from './BaseView.less';
-import { ListDoctorDetails, UpdateDoctorInfo } from '../service';
 
 const validatorPhone = (rule: any, value: string[], callback: (message?: string) => void) => {
   if (!value[0]) {
@@ -44,28 +37,28 @@ interface BaseViewProps {
   id?: string;
   children?: ReactNode;
 }
-const BaseView: React.FC<BaseViewProps> = ( {id, children} ) => {
+const BaseView: React.FC<BaseViewProps> = ({ id, children }) => {
   // const id = props.id;
-  const {
-    data: currentUser,
-    run: refreshCurrent,
-    loading,
-  } = useRequest(() => {
-    return ListDoctorDetails(id);
-  });
+  // const {
+  //   data: currentUser,
+  //   run: refreshCurrent,
+  //   loading,
+  // } = useRequest(() => {
+  //   return ListDoctorDetails(id);
+  // });
 
-  const getAvatarURL = () => {
-    if (currentUser) {
-      if (currentUser.photo) {
-        return currentUser.photo;
-      }
-      const url = 'https://gw.alipayobjects.com/zos/rmsportal/BiazfanxmamNRoxxVxka.png';
-      return url;
-    }
-    return '';
-  };
+  // const getAvatarURL = () => {
+  //   if (currentUser) {
+  //     if (currentUser.photo) {
+  //       return currentUser.photo;
+  //     }
+  //     const url = 'https://gw.alipayobjects.com/zos/rmsportal/BiazfanxmamNRoxxVxka.png';
+  //     return url;
+  //   }
+  //   return '';
+  // };
 
-  const handleFinish = async (values) => {
+  const handleFinish = async (values: any) => {
     console.log(values);
     try {
       const msg = await UpdateDoctorInfo(id, values);
@@ -76,7 +69,6 @@ const BaseView: React.FC<BaseViewProps> = ( {id, children} ) => {
           message: '更新成功',
         });
         window.history.back();
-
       } else {
         notification.error({
           duration: 4,
@@ -84,7 +76,7 @@ const BaseView: React.FC<BaseViewProps> = ( {id, children} ) => {
           description: msg.msg || '更新错误，未知错误类型',
         });
       }
-      await refreshCurrent();
+      // await refreshCurrent();
     } catch (error) {
       notification.error({
         duration: 4,
@@ -94,10 +86,14 @@ const BaseView: React.FC<BaseViewProps> = ( {id, children} ) => {
     }
   };
 
-  
+  const location = useLocation() as Location & {
+    query: { date: string; name: string; time: string };
+  };
+  console.log(location.query);
+
   return (
     <div className={styles.baseView}>
-      {loading ? null : (
+      {
         <>
           <div className={styles.left}>
             <ProForm
@@ -113,11 +109,9 @@ const BaseView: React.FC<BaseViewProps> = ( {id, children} ) => {
                   children: '更新基本信息',
                 },
               }}
-              initialValues={{ ...currentUser }}
               hideRequiredMark
             >
-
-            <ProFormText
+              <ProFormText
                 width="md"
                 name="date"
                 label="日期"
@@ -127,9 +121,10 @@ const BaseView: React.FC<BaseViewProps> = ( {id, children} ) => {
                     message: '请输入排班日期!',
                   },
                 ]}
+                initialValue={location.query.date}
               />
 
-               <ProFormSelect
+              <ProFormSelect
                 width="xs"
                 options={[
                   {
@@ -137,24 +132,28 @@ const BaseView: React.FC<BaseViewProps> = ( {id, children} ) => {
                     label: '上午',
                   },
                   {
-                    value: "下午",
-                    label: "下午",
+                    value: '下午',
+                    label: '下午',
+                  },
+                  {
+                    value: '晚上',
+                    label: '晚上',
                   },
                 ]}
-                name="section"
+                name="time"
                 label="时间段"
-
                 rules={[
                   {
                     required: true,
                     message: '请选择排班时间段!',
-                  }, 
+                  },
                 ]}
+                initialValue={location.query.time}
               />
 
-                <ProFormText
+              <ProFormText
                 width="md"
-                name="doctor"
+                name="name"
                 label="医生"
                 rules={[
                   {
@@ -162,15 +161,15 @@ const BaseView: React.FC<BaseViewProps> = ( {id, children} ) => {
                     message: '请输入值班医生!',
                   },
                 ]}
-              />      
-
+                initialValue={location.query.name}
+              />
             </ProForm>
           </div>
           {/* <div className={styles.right}>
             <AvatarView avatar={getAvatarURL()} />
           </div> */}
         </>
-      )}
+      }
     </div>
   );
 };

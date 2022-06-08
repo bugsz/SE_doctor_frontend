@@ -6,8 +6,8 @@ import moment from 'moment';
 import React, { FC, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { history, request, useParams } from 'umi';
-import { DoctorDetailType, scheduleItem } from './data.js';
-import { DeleteSchedule, ListSchedule } from './service';
+import { DoctorDetailType, scheduleItem } from '../data.js';
+import { DeleteSchedule, ListSchedule } from '../service';
 
 function getInfoUrl(record: scheduleItem) {
   return `/TimeTable_Change/details`;
@@ -96,7 +96,18 @@ const columns: ProColumns<scheduleItem>[] = [
       <Link className="to" to={{ pathname: getInfoUrl(record) }} key="view">
         查看
       </Link>,
-      <Link className="to" to={{ pathname: getEditUrl(record) }} key="view">
+      <Link
+        className="to"
+        to={{
+          pathname: '/TimeTable_Change/edit',
+          query: {
+            name: record.doctor_name,
+            date: record.date,
+            time: record.time,
+          },
+        }}
+        key="view"
+      >
         编辑
       </Link>,
 
@@ -134,9 +145,11 @@ const ManageNew: FC = () => {
       request={async (params = {}, sort, filter) => {
         const response = await ListSchedule({ ...params, dept_id: department }).then(
           async (res: { data: scheduleItem[]; status: number; msg: string }) => {
+            console.log(res.data);
+
             let _data_promise = await res.data.map(async (item) => {
               /// re-format date string...
-              item.date = moment(item.date).format('yyyy年MM月DD日 HH:mm');
+              item.date = moment(item.date).format('yyyy年MM月DD日');
 
               /// calculate doctor name...
               let doctor_detail: { data: DoctorDetailType; status: number; msg: string } =
@@ -212,9 +225,16 @@ const ManageNew: FC = () => {
         >
           返回科室列表
         </Button>,
-        <Button key="button" icon={<PlusOutlined />} type="primary" onClick={() => {history.push("/TimeTable_Change/new")}}>
-        新建
-      </Button>,
+        <Button
+          key="button"
+          icon={<PlusOutlined />}
+          type="primary"
+          onClick={() => {
+            history.push('/TimeTable_Change/new');
+          }}
+        >
+          新建
+        </Button>,
         // <Dropdown key="menu" overlay={menu}>
         //   <Button>
         //     <EllipsisOutlined />
