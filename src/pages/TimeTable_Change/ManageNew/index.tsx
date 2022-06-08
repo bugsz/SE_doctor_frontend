@@ -9,6 +9,8 @@ import { history, request, useParams } from 'umi';
 import { DoctorDetailType, scheduleItem } from '../data.js';
 import { DeleteSchedule, ListSchedule } from '../service';
 
+let department: string;
+
 function getInfoUrl(record: scheduleItem) {
   return `/TimeTable_Change/details`;
 }
@@ -104,6 +106,7 @@ const columns: ProColumns<scheduleItem>[] = [
             name: record.doctor_name,
             date: record.raw_date,
             time: record.time,
+            department: department,
             doc_id: record.doctor_id,
           },
         }}
@@ -132,7 +135,7 @@ interface IParam {
   department: string;
 }
 
-let department: string;
+
 
 const ManageNew: FC = () => {
   const actionRef = useRef<ActionType>();

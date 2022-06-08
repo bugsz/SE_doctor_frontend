@@ -62,7 +62,7 @@ const BaseView: React.FC<BaseViewProps> = ({ id, children }) => {
   let curr_date = '';
 
   const location = useLocation() as Location & {
-    query: { date: string; name: string; time: string; doc_id: string };
+    query: { date: string; name: string; time: string; doc_id: string; department: string };
   };
   console.log(location.query);
 
@@ -77,6 +77,7 @@ const BaseView: React.FC<BaseViewProps> = ({ id, children }) => {
       const msg = await UpdateDoctorInfo({
         schedule_id: curr_date,
         time: values.time,
+        department: location.query.department,
         doctor_id: location.query.doc_id,
       });
       if (msg.status === 100) {
@@ -126,7 +127,9 @@ const BaseView: React.FC<BaseViewProps> = ({ id, children }) => {
                 onChange={onDateChange}
                 picker="date"
                 defaultPickerValue={moment(location.query.date)}
-              /><br></br><br></br>
+              />
+              <br></br>
+              <br></br>
               <ProFormSelect
                 width="xs"
                 options={[

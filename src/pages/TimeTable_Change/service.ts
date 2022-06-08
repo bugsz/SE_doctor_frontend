@@ -18,7 +18,7 @@ export async function DeleteSchedule(params: { id: string }) {
 
 export async function UpdateDoctorInfo(params: {
   schedule_id: string;
-  department?: string;
+  department: string;
   time: string;
   doctor_id: string;
 }) {
