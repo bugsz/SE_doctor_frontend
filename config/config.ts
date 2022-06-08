@@ -375,7 +375,8 @@ export default defineConfig({
       name: "查看排班",
       icon: "table",
       path: '/TimeTable',
-      component: "./TimeTable"
+      component: "./TimeTable_New/ManageNew",
+      access: "canDoctor"
     },
 
     {

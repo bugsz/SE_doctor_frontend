@@ -6,7 +6,7 @@ import { Button, notification } from 'antd';
 import moment from 'moment';
 import React, { FC, useRef } from 'react';
 import { Link } from 'react-router-dom';
-import { history, request, useParams } from 'umi';
+import { history, request, useModel, useParams } from 'umi';
 import { DoctorDetailType, scheduleItem } from '../data.js';
 import { DeleteSchedule, ListSchedule } from '../service';
 
@@ -63,6 +63,14 @@ const columns: ProColumns<scheduleItem>[] = [
     valueType: 'indexBorder',
     width: 48,
   },
+  // {
+  //   title: '科室',
+  //   key: 'department',
+  //   dataIndex: 'currentUser.department',
+  //   // valueType: 'string',
+  //   // sorter: true,
+  //   hideInSearch: true,
+  // },
   {
     title: '日期',
     dataIndex: 'date',
@@ -95,57 +103,55 @@ const columns: ProColumns<scheduleItem>[] = [
     // sorter: true,
     // hideInSearch: true,
   },
-  {
-    title: '操作',
-    valueType: 'option',
-    key: 'option',
-    render: (text, record, _, action) => [
-      // <Link className="to" to={{ pathname: getInfoUrl(record) }} key="view">
-      //   查看
-      // </Link>,
-      <Link
-        className="to"
-        to={{
-          pathname: '/TimeTable_Change/edit',
-          query: {
-            name: record.doctor_name,
-            date: record.raw_date,
-            time: record.time,
-            department: department,
-            doc_id: record.doctor_id,
-          },
-        }}
-        key="view"
-      >
-        编辑
-      </Link>,
+  // {
+  //   title: '操作',
+  //   valueType: 'option',
+  //   key: 'option',
+  //   render: (text, record, _, action) => [
+  //     <Link className="to" to={{ pathname: getInfoUrl(record) }} key="view">
+  //       查看
+  //     </Link>,
+  //     <Link
+  //       className="to"
+  //       to={{
+  //         pathname: '/TimeTable_Change/edit',
+  //         query: {
+  //           name: record.doctor_name,
+  //           date: record.raw_date,
+  //           time: record.time,
+  //           department: department,
+  //           doc_id: record.doctor_id,
+  //         },
+  //       }}
+  //       key="view"
+  //     >
+  //       编辑
+  //     </Link>,
 
-      <a
-        href={getDeleteUrl(record)}
-        target="_blank"
-        rel="noopener noreferrer"
-        key="view"
-        onClick={(e) => {
-          e.preventDefault();
-          deleteSchedule(record);
-          // window.history.back();
-        }}
-      >
-        删除
-      </a>,
-    ],
-  },
+  //     <a
+  //       href={getDeleteUrl(record)}
+  //       target="_blank"
+  //       rel="noopener noreferrer"
+  //       key="view"
+  //       onClick={(e) => {
+  //         e.preventDefault();
+  //         deleteSchedule(record);
+  //       }}
+  //     >
+  //       删除
+  //     </a>,
+  //   ],
+  // },
 ];
-
-interface IParam {
-  department: string;
-}
-
-
 
 const ManageNew: FC = () => {
   const actionRef = useRef<ActionType>();
-  department = useParams<IParam>().department;
+
+  const { currentUser: currentUser } = useModel('@@initialState', (ret) => ret.initialState)!;
+
+  if (currentUser === undefined) {
+    throw 'current user undefined?';
+  }
 
   return (
     <ProTable<scheduleItem>
@@ -153,7 +159,7 @@ const ManageNew: FC = () => {
       actionRef={actionRef}
       cardBordered
       request={async (params = {}, sort, filter) => {
-        const response = await ListSchedule({ ...params, dept_id: department }).then(
+        const response = await ListSchedule({ ...params, dept_id: currentUser.department }).then(
           async (res: { data: scheduleItem[]; status: number; msg: string }) => {
             console.log(res.data);
 
@@ -228,32 +234,32 @@ const ManageNew: FC = () => {
       dateFormatter="string"
       headerTitle="排班列表"
       toolBarRender={() => [
-        <Button
-          key="button"
-          icon={<ArrowLeftOutlined />}
-          type="primary"
-          onClick={() => {
-            history.push('/TimeTable_Change');
-          }}
-        >
-          返回科室列表
-        </Button>,
-        <Button
-          key="button"
-          icon={<PlusOutlined />}
-          type="primary"
-          onClick={() => {
-            history.push({
-              pathname:'/TimeTable_Change/new',
-              query:{
-                 department:department
-              }
-            });
+        // <Button
+        //   key="button"
+        //   icon={<ArrowLeftOutlined />}
+        //   type="primary"
+        //   onClick={() => {
+        //     history.push('/TimeTable_Change');
+        //   }}
+        // >
+        //   返回科室列表
+        // </Button>,
+        // <Button
+        //   key="button"
+        //   icon={<PlusOutlined />}
+        //   type="primary"
+        //   onClick={() => {
+        //     history.push({
+        //       pathname:'/TimeTable_Change/new',
+        //       query:{
+        //          department:department
+        //       }
+        //     });
             
-          }}
-        >
-          新建
-        </Button>,
+        //   }}
+        // >
+        //   新建
+        // </Button>,
         // <Dropdown key="menu" overlay={menu}>
         //   <Button>
         //     <EllipsisOutlined />
