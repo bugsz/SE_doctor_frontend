@@ -79,7 +79,7 @@ const BaseView: React.FC<BaseViewProps> = ({ id, children }) => {
         time: values.time,
         doctor_id: location.query.doc_id,
       });
-      if (msg.status === 'success') {
+      if (msg.status === 100) {
         notification.success({
           duration: 4,
           description: '个人信息更新成功',
