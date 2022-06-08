@@ -1,6 +1,6 @@
 import { request } from 'umi';
 
-export async function ListDoctorDetails(id, data, options) {
+export async function ListScheduleDetails(id, data, options) {
   console.log(id);
   console.log(options);
   return request("/api/TimeTable_Change/details", {

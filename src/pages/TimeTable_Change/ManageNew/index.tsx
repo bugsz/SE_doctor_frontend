@@ -10,7 +10,7 @@ import { DoctorDetailType, scheduleItem } from './data.js';
 import { DeleteSchedule, ListSchedule } from './service';
 
 function getInfoUrl(record: scheduleItem) {
-  return `/TimeTable_Change/details/${record.date}`;
+  return `/TimeTable_Change/details`;
 }
 
 function getDeleteUrl(record: scheduleItem) {
@@ -212,9 +212,9 @@ const ManageNew: FC = () => {
         >
           返回科室列表
         </Button>,
-        <Button key="button" icon={<PlusOutlined />} type="primary">
-          新建
-        </Button>,
+        <Button key="button" icon={<PlusOutlined />} type="primary" onClick={() => {history.push("/TimeTable_Change/new")}}>
+        新建
+      </Button>,
         // <Dropdown key="menu" overlay={menu}>
         //   <Button>
         //     <EllipsisOutlined />

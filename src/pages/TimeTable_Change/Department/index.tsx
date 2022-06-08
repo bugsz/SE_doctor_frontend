@@ -49,7 +49,7 @@ const columns: ProColumns<departmentItem>[] = [
     valueType: 'option',
     key: 'option',
     render: (text, record, _, action) => [
-      <Link className="to" to={{pathname: getInfoUrl(record)}} key="view">查看排班</Link>,
+      <Link className="to" to={{pathname: getInfoUrl(record)}} key="view">查看{record.department}排班</Link>,
     ],
   },
 ];
