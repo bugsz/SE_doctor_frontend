@@ -1,9 +1,9 @@
+import React, { useState, useRef, useLayoutEffect } from 'react';
 import { GridContent } from '@ant-design/pro-layout';
 import { Menu } from 'antd';
-import React, { useLayoutEffect, useRef, useState } from 'react';
-import { useParams } from 'umi';
 import BaseView from './components/base';
 import styles from './style.less';
+
 
 const { Item } = Menu;
 
@@ -13,12 +13,8 @@ type SettingsState = {
   selectKey: SettingsStateKeys;
 };
 
-interface IParam {
-  id: string;
-}
-
-const New: React.FC = () => {
-  const id = useParams<IParam>().id;
+const New: React.FC = (props) => {
+  const id = props.match.params.id;
   const menuMap: Record<string, React.ReactNode> = {
     base: '基本设置',
     // security: '安全设置',
@@ -67,7 +63,7 @@ const New: React.FC = () => {
     const { selectKey } = initConfig;
     switch (selectKey) {
       case 'base':
-        return <BaseView id={id} />;
+        return <BaseView id={id}/>;
       // case 'security':
       //   return <SecurityView />;
       // case 'binding':
@@ -105,7 +101,7 @@ const New: React.FC = () => {
         </div>
         <div className={styles.right}>
           <div className={styles.title}>{menuMap[initConfig.selectKey]}</div>
-          {renderChildren()}
+          {renderChildren(props)}
         </div>
       </div>
     </GridContent>
