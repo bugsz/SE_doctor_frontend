@@ -16,7 +16,7 @@ type SettingsState = {
 const Edit: React.FC = (props) => {
   const id = props.match.params.id;
   const menuMap: Record<string, React.ReactNode> = {
-    base: '基本设置',
+    base: '医生编辑',
   };
 
   const [initConfig, setInitConfig] = useState<SettingsState>({

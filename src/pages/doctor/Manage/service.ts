@@ -7,6 +7,7 @@ export async function ListDoctor(params) {
   })
 }
 export async function DeleteDoctor(params) {
+  console.log(params)
   return request("/api/doctor/delete", {
     method: "DELETE",
     params: {...params},
