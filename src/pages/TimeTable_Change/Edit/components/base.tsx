@@ -73,6 +73,7 @@ const BaseView: React.FC<BaseViewProps> = ({ id, children }) => {
 
   const handleFinish = async (values: scheduleItem) => {
     console.log(values);
+    console.log(location.query.department);
     try {
       const msg = await UpdateDoctorInfo({
         schedule_id: curr_date,
@@ -83,7 +84,7 @@ const BaseView: React.FC<BaseViewProps> = ({ id, children }) => {
       if (msg.status === 100) {
         notification.success({
           duration: 4,
-          description: '个人信息更新成功',
+          description: '排班信息更新成功',
           message: '更新成功',
         });
         window.history.back();
@@ -134,16 +135,16 @@ const BaseView: React.FC<BaseViewProps> = ({ id, children }) => {
                 width="xs"
                 options={[
                   {
-                    value: '上午',
-                    label: '上午',
+                    value: 'morning',
+                    label: 'morning',
                   },
                   {
-                    value: '下午',
-                    label: '下午',
+                    value: 'afternoon',
+                    label: 'afternoon',
                   },
                   {
-                    value: '晚上',
-                    label: '晚上',
+                    value: 'evening',
+                    label: 'evening',
                   },
                 ]}
                 name="time"

@@ -1,12 +1,10 @@
 import ProForm, { ProFormSelect, ProFormText } from '@ant-design/pro-form';
 import { DatePicker, notification } from 'antd';
-import { convertLegacyProps } from 'antd/lib/button/button';
 import moment, { Moment } from 'moment';
 import React, { ReactNode } from 'react';
 import { Location, useLocation } from 'umi';
 import { scheduleItem } from '../../data';
 import { UpdateDoctorInfo } from '../../service';
-import { AddDoctorInfo } from '../service';
 import styles from './BaseView.less';
 
 const validatorPhone = (rule: any, value: string[], callback: (message?: string) => void) => {
@@ -73,36 +71,34 @@ const BaseView: React.FC<BaseViewProps> = ({ id, children }) => {
     console.log(curr_date);
   };
 
-  const handleFinish = async (values: any) => {
+  const handleFinish = async (values: scheduleItem) => {
     console.log(values);
     console.log(location.query.department);
     try {
-      const msg = await AddDoctorInfo({
-        date: curr_date,
+      const msg = await UpdateDoctorInfo({
+        schedule_id: curr_date,
         time: values.time,
-        depart_id: location.query.department,
-        doctor_id: values.id,
-        quota: 1,
+        department: location.query.department,
+        doctor_id: location.query.doc_id,
       });
-      console.log(msg.status);
       if (msg.status === 100) {
         notification.success({
           duration: 4,
-          description: '新建排班成功',
-          message: '新建成功',
+          description: '个人信息更新成功',
+          message: '更新成功',
         });
         window.history.back();
       } else {
         notification.error({
           duration: 4,
-          message: '新建失败',
-          description: msg.msg || '新建错误，未知错误类型',
+          message: '更新失败',
+          description: msg.msg || '更新错误，未知错误类型',
         });
       }
     } catch (error) {
       notification.error({
         duration: 4,
-        message: '新建失败',
+        message: '更新失败',
         description: '请求失败，请稍后重新尝试',
       });
     }
@@ -169,18 +165,6 @@ const BaseView: React.FC<BaseViewProps> = ({ id, children }) => {
                   {
                     required: true,
                     message: '请输入值班医生!',
-                  },
-                ]}
-                initialValue={location.query.name}
-              />
-            <ProFormText
-                width="md"
-                name="id"
-                label="医生工号"
-                rules={[
-                  {
-                    required: true,
-                    message: '请输入值班医生工号!',
                   },
                 ]}
                 initialValue={location.query.name}

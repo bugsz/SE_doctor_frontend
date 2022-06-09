@@ -88,21 +88,21 @@ const BaseView: React.FC<BaseViewProps> = ({ id, children }) => {
       if (msg.status === 100) {
         notification.success({
           duration: 4,
-          description: '新建排班成功',
-          message: '新建成功',
+          description: '个人信息更新成功',
+          message: '更新成功',
         });
         window.history.back();
       } else {
         notification.error({
           duration: 4,
-          message: '新建失败',
-          description: msg.msg || '新建错误，未知错误类型',
+          message: '更新失败',
+          description: msg.msg || '更新错误，未知错误类型',
         });
       }
     } catch (error) {
       notification.error({
         duration: 4,
-        message: '新建失败',
+        message: '更新失败',
         description: '请求失败，请稍后重新尝试',
       });
     }

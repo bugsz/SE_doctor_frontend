@@ -32,7 +32,7 @@ export type patientInfoType = {
   id: string;
   name: string;
   gender: string;
-  age: Number;
+  age: number;
   phone: string;
   appoint_date: string;
   section: string;
