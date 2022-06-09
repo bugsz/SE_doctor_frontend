@@ -7,7 +7,7 @@ import request from 'umi-request';
 import { doctorItem } from './data.js';
 import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
 import { history } from 'umi';
-import { DeleteDoctor, ListDoctor } from './service';
+import { DeleteDoctor, ListDoctor } from '../service';
 
 function getInfoUrl(record: doctorItem) {
   return `/doctor/details/${record.doctor_id}`;
@@ -76,7 +76,7 @@ const columns: ProColumns<doctorItem>[] = [
 
   {
     title: '工号',
-    key: 'doctor_id',
+    key: 'id',
     dataIndex: 'doctor_id',
     // valueType: 'string',
     // sorter: true,
@@ -110,6 +110,7 @@ const columns: ProColumns<doctorItem>[] = [
         (e) => {
           e.preventDefault();
           deleteDoctor(record.doctor_id);
+          history.push("/doctor")
         }
       }>
       删除
@@ -162,7 +163,7 @@ const Manage = () => {
           console.log('value: ', value);
         },
       }}
-      rowKey="doctor_id"
+      rowKey="id"
       search={{
         labelWidth: 'auto',
       }}

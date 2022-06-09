@@ -7,6 +7,7 @@ export async function ListDoctorDetails(id: string): Promise<{ data: DoctorItem 
     method: 'GET',
     params: { doctor_id: id },
   });
+  console.log(doctorDetail)
 
   return doctorDetail;
 }
@@ -65,9 +66,20 @@ export async function ListDoctor(params: {
     params: { ...params },
   });
 }
+
+
 export async function DeleteDoctor(params: { doctor_id: string }) {
+  console.log(params)
   return request('/api/doctor/delete', {
     method: 'DELETE',
     params: { ...params },
   });
 }
+
+// export async function ListDoctorDetails(id, data, options) {
+//   console.log(id);
+//   console.log(options);
+//   return request("/api/doctor/details", {
+//     method: "GET",
+//     params: {id: id},
+//   })

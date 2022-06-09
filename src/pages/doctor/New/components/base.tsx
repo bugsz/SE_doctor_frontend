@@ -12,7 +12,7 @@ import ProForm, {
 import { useRequest, useModel } from 'umi';
 
 import styles from './BaseView.less';
-import { AddDoctorInfo, ListDoctorDetails } from '../service';
+import { AddDoctorInfo, ListDoctorDetails } from '../../service';
 
 const validatorPhone = (rule: any, value: string[], callback: (message?: string) => void) => {
   if (!value[0]) {
@@ -58,7 +58,7 @@ const BaseView: React.FC<BaseViewProps> = ( {id, children} ) => {
 
   loading = false;
   currentUser = {
-    doctor_id: "",
+    id: "",
     doctor_name: "",
     department: "",
     position: "",
@@ -80,7 +80,8 @@ const BaseView: React.FC<BaseViewProps> = ( {id, children} ) => {
 
   const handleFinish = async (values) => {
     try {
-      const msg = await AddDoctorInfo(id, values, {});
+      // const msg = await AddDoctorInfo(id, values, {});
+      const msg = await AddDoctorInfo(values)
       console.log(msg)
       if (msg.status === 100) {
         notification.success({
@@ -234,7 +235,7 @@ const BaseView: React.FC<BaseViewProps> = ( {id, children} ) => {
                 ]}
               />
 
-              <ProFormSelect
+              {/* <ProFormSelect
                 width="xs"
                 options={[
                   {
@@ -258,7 +259,17 @@ const BaseView: React.FC<BaseViewProps> = ( {id, children} ) => {
                     message: '请选择职位!',
                   }, 
                 ]}
-              />
+              /> */}
+              <ProFormText
+                width="md"
+                name="position"
+                label="职位"
+                rules={[
+                  {
+                    required: true,
+                    message: '请填写职位!',
+                  }, 
+                ]}/>
 
 
             </ProForm>

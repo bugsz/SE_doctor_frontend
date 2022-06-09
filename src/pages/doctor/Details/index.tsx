@@ -6,7 +6,7 @@ import React, { useState } from 'react';
 import { Radio, Switch, Space, Descriptions, message, Avatar, Card, Row, Col } from 'antd';
 import type { ProFieldFCMode } from '@ant-design/pro-utils';
 
-import { ListDoctorDetails, ListDoctorSchedule } from "./service";
+import { ListDoctorDetails, ListDoctorSchedule } from "../service";
 import {GridContent, PageContainer, RouteContext } from "@ant-design/pro-layout";
 
 import type { ProColumns } from '@ant-design/pro-components';
@@ -146,7 +146,7 @@ const Details: FC = (props) => {
   const schedule = (
     //{
     <>
-      {loadingSchedule || loadingProject ? null : currentSchedule.length === 0 ? (
+      {loadingSchedule ? null : currentSchedule.length === 0 ? (
         <div>暂无排班</div>
       ) : (
         currentSchedule.map((item, index) => {
