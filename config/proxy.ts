@@ -7,7 +7,7 @@
  * https://pro.ant.design/docs/deploy
  */
 
-const deploy_api = "http://101.35.15.247:3000/"
+const deploy_api = "http://yzhblind.top:3000/"
 export default {
   dev: {
     '/api/': {
