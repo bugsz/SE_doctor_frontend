@@ -220,7 +220,18 @@ const BaseView: React.FC<BaseViewProps> = ( {id, children} ) => {
                 ]}
               />
 
-              <ProFormSelect
+              <ProFormText 
+                width="md"
+                name="position"
+                label="职位"
+                rules={[
+                  {
+                    required: true,
+                    message: '请填写职位!',
+                  }, 
+                ]}
+              />
+              {/* <ProFormSelect
                 width="xs"
                 options={[
                   {
@@ -244,7 +255,7 @@ const BaseView: React.FC<BaseViewProps> = ( {id, children} ) => {
                     message: '请选择职位!',
                   }, 
                 ]}
-              />
+              /> */}
 
 
             </ProForm>

@@ -6,7 +6,7 @@ import React, { useState } from 'react';
 import { Radio, Switch, Space, Descriptions, message, Avatar, Card, Row, Col } from 'antd';
 import type { ProFieldFCMode } from '@ant-design/pro-utils';
 
-import { ListDoctorDetails, ListDoctorSchedule } from "./service";
+import { ListDoctorDetails, ListDoctorSchedule } from "../service";
 import {GridContent, PageContainer, RouteContext } from "@ant-design/pro-layout";
 
 import type { ProColumns } from '@ant-design/pro-components';
@@ -36,8 +36,9 @@ const description = (currentDoctor) => {
 };
 
 const avatar = (currentDoctor) => {
+    const photo = 'https://gw.alipayobjects.com/zos/rmsportal/BiazfanxmamNRoxxVxka.png'
     return (
-        <img className={styles.moreInfo} src={currentDoctor.photo} />
+        <img className={styles.moreInfo} src={photo} />
         // <Avatar className={styles.moreInfo} src={currentDoctor.photo}/>
     );
 }
@@ -52,29 +53,33 @@ const Details: FC = (props) => {
   const [currentSchedule, setCurrentSchedule] = useState([]);
   const [tableListDataSource, setTableListDataSource] = useState([]);
 
+
   // const id = props.match.params.id;
 
 
   const createScheduleList = () => {
     setTableListDataSource([]);
-    const schedule = currentSchedule.arrangement_list
+    let dataSource = []
+    const schedule = currentSchedule
     for (let i = 0; i < schedule.length; i += 1) {
-      tableListDataSource.push({
+      dataSource.push({
         name: currentDoctor ? currentDoctor.name : '未知',
         department: currentDoctor ? currentDoctor.dept_id : '未知',
         schedule: transform(schedule[i]),
         availability: schedule[i].availability,
       });
     }
-    console.log(tableListDataSource)
+    console.log(dataSource)
+    setTableListDataSource(dataSource)
   };
 
   const getSchedule = async () => {
-    console.log(loadingProject);
+    // console.log(loadingProject);
     await ListDoctorSchedule(props.match.params.id).then((res) => {
-      const data = Array.from(res.data);
-      setCurrentSchedule(data);
-      console.log(currentSchedule);
+      console.log(res)
+      const schedule = Array.from(res.data.arrangement_list);
+      setCurrentSchedule(schedule);
+      console.log(schedule);
     });
   }
 
@@ -134,14 +139,14 @@ const Details: FC = (props) => {
     //     break;
     // }
 
-    date_str = item.date;
+    date_str = item.schedule_id;
     return date_str + ' ' + time_str;
   };
 
   const schedule = (
     //{
     <>
-      {loadingSchedule || loadingProject ? null : currentSchedule.length === 0 ? (
+      {loadingSchedule ? null : currentSchedule.length === 0 ? (
         <div>暂无排班</div>
       ) : (
         currentSchedule.map((item, index) => {

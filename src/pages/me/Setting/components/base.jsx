@@ -106,7 +106,7 @@ const BaseView = () => {
               <ProFormText
                   disabled
                   width="md"
-                  name="doctor_id"
+                  name="id"
                   label="工号"
                   rules={[
                     {

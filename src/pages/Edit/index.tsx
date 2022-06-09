@@ -201,7 +201,7 @@ const Edit = (props) => {
 
             <ProFormText
                 width="md"
-                name="doctor_id"
+                name="id"
                 label="工号"
                 rules={[
                   {
