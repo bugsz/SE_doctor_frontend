@@ -34,10 +34,17 @@ export async function AddDoctorInfo(data: DoctorItem): Promise<{ msg: string; st
 /// unused?
 export async function ModifyDoctorInfo(id: string, data: any, options?: any) {
 
+  const d = {
+    ...data,
+    department_id: data.dept_id,  
+    doctor_id: id,
+  }
+
+  console.log(d)
   return request('/api/doctor/info/modify', {
     method: 'POST',
-    params: { doctor_id: id },
-    data: data
+    // params: { doctor_id: id },
+    data: d
   });
 }
 
