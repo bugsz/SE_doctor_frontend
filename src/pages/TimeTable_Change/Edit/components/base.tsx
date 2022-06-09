@@ -84,7 +84,7 @@ const BaseView: React.FC<BaseViewProps> = ({ id, children }) => {
       if (msg.status === 100) {
         notification.success({
           duration: 4,
-          description: '个人信息更新成功',
+          description: '排班信息更新成功',
           message: '更新成功',
         });
         window.history.back();
