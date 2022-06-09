@@ -29,7 +29,7 @@ export async function UpdateDoctorInfo(params: {
 }) {
   return request('/api/admin/schedule/upload', {
     method: 'POST',
-    params: { ...params },
+    data: { ...params },
   });
 }
 
